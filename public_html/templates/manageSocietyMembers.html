@@ -1,0 +1,33 @@
+<ng-include src="'templates/menu.html'"></ng-include>
+
+<div class="container" ng-controller="ManageSocietyMembersController">
+    <div class="right">
+        <div class="col-md-12">
+            <button class="btn btn-default green-circle-button" title="Register Member"  ng-click="gotoAdd();"><i class="fa fa-lg fa-plus"></i></button>
+
+        </div>   
+    </div>
+    <table>
+        <caption>Existing Members</caption>
+        <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Phone</th>
+                <th scope="col">Address</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="member in members">
+                <td data-label="Name">{{member.name}}</td>
+                <td data-label="Email">{{member.email}}</td>
+                <td data-label="Phone">{{member.phone}}</td>
+                <td data-label="Address">{{member.address}}</td>
+                <td data-label="Action"><button class="btn btn-info">Reset Pass</button></td>
+            </tr>
+
+        </tbody>
+    </table>
+    <br>
+</div>

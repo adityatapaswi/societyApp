@@ -1,0 +1,35 @@
+<ng-include src="'templates/menu.html'"></ng-include>
+
+<div class="container" ng-controller="DiscussionController">
+    <div class="right">
+        <div class="col-md-12">
+            <button class="btn btn-default green-circle-button" title="Open Discussion"  ng-click="gotoAdd();"><i class="fa fa-lg fa-plus"></i></button>
+
+        </div>   
+    </div>
+    <table>
+        <caption>Open Discussions</caption>
+        <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Started By</th>
+                <th scope="col">Started On</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="discussion in discussions">
+                <td data-label="Name">{{discussion.name}}</td>
+                <td data-label="Started By">{{discussion.by}}</td>
+                <td data-label="Started On">{{discussion.on}}</td>
+                <td data-label="Action">
+                    <button class="btn btn-info" title="View Discussions" ng-click="viewDiscussion()"><i class="fa fa-lg fa-eye"></i></button>
+                    <button class="btn btn-danger" title="Close Discussions"><i class="fa fa-lg fa-trash-o"></i></button>
+                    
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <br>
+</div>

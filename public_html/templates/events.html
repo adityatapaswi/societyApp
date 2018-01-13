@@ -1,0 +1,20 @@
+<div ng-controller="EventController">
+    <h2>Upcoming Events</h2>
+     <div class="right">
+        <div>
+            <button class="btn btn-default green-circle-button" title="Add Event"  ng-click="gotoAdd();"><i class="fa fa-lg fa-plus"></i></button>
+
+        </div>   
+    </div>
+    <div id="mainbox" >
+
+        <div class="card-birthday" ng-repeat="event in events">
+<!--            <img ng-show="ba.eventType === 'birthday'" src="https://image.freepik.com/free-vector/happy-birthday-background_1344-43.jpg" alt="{{ba.eventType}}" />
+            <img ng-show="ba.eventType === 'anniversary'" src="http://www.hdwallpapersz.in/wp-content/uploads/2015/12/happy-anniversary-images-download-cake.jpg" alt="{{ba.eventType}}" />-->
+            
+            <h2>{{event.title}}</h2>
+            <p class="right">{{event.date}}</p>
+        </div>
+    </div>
+    <hr>
+</div>

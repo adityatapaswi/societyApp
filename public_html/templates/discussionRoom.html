@@ -1,0 +1,43 @@
+<div class="container" ng-controller="DiscussionController">
+    <div class="menu">
+        <span class="back-text"><a style="text-decoration: none" href="#/discussions"><i class="back fa fa-angle-left"></i></a> {{dicussionName}}
+            <!--<img src="https://i.imgur.com/G4EjwqQ.jpg" draggable="false"/>-->
+        </span>
+        <!--        <div class="name">Random chat</div>
+                <div class="members"><b>You</b>, Marga, Charo & Brotons</div>-->
+    </div>
+    <ol class="chat">
+        <li class="other" ng-class="{self: msg.from === 'Aditya Tapaswi'}" ng-repeat="msg in messages">
+            <div class="msg">
+                <div class="user">{{msg.from}}</div>
+                <pre>{{msg.msg}}</pre>
+                <time>{{msg.on}}</time>
+            </div>
+        </li>
+        <!--        <li class="self">
+                    <div class="msg">
+                        <p>Puff...</p>
+                        <p>I'm still doing the Góngora comment... <emoji class="books"></emoji></p>
+                        <p>Better other day</p>
+                        <time>20:18</time>
+                    </div>
+                </li>-->
+
+        <!--<div class="day">Today</div>-->
+
+    </ol>
+    <div class="typezone">
+        <form class="col-sm-12">
+            <div class="row">
+                <div class="col-sm-11 form-group">
+                    <textarea type="text" placeholder="Say something"></textarea>
+                </div>
+
+                <div class="col-sm-1 form-group">
+                    <button class="btn btn-default green-circle-button" title="Add Transaction" ng-click=""><i class="fa fa-lg fa-send"></i></button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>

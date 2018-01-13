@@ -1,0 +1,49 @@
+<ng-include src="'templates/menu.html'"></ng-include>
+
+<div class="container" ng-controller="BalanceSheetController">
+    <div>
+        <h2>Summary</h2>
+        <div id="mainbox" >
+
+            <div class="card-birthday" ng-repeat="s in summary">
+                <!--<img ng-show="ba.eventType === 'birthday'" src="https://image.freepik.com/free-vector/happy-birthday-background_1344-43.jpg" alt="{{ba.eventType}}" />-->
+                <!--<img ng-show="ba.eventType === 'anniversary'" src="http://www.hdwallpapersz.in/wp-content/uploads/2015/12/happy-anniversary-images-download-cake.jpg" alt="{{ba.eventType}}" />-->
+                <h2>{{s.title}}</h2>
+                <p class="right">{{s.amt}}</p>
+            </div>
+        </div>
+        <hr>
+    </div>
+    <div class="right">
+        <div class="col-md-12">
+            <button class="btn btn-default green-circle-button" title="Add Transaction" ng-click="gotoAdd();"><i class="fa fa-lg fa-plus"></i></button>
+
+        </div>   
+    </div>
+    <table>
+        <caption>Transaction History</caption>
+        <thead>
+            <tr>
+                <th scope="col">Transaction Id</th>
+                <th scope="col">Date</th>
+                <th scope="col">Description</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Type</th>
+                <th scope="col">By</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="transaction in transactions">
+                <td data-label="Transaction Id">{{transaction.tid}}</td>
+                <td data-label="Date">{{transaction.date}}</td>
+                <td data-label="Description">{{transaction.desc}}</td>
+                <td data-label="Amount">{{transaction.amt}}</td>
+                <td data-label="Type"><span class="green" ng-class="{red: transaction.type === 'DB'}">{{transaction.type}}</span></td>
+                <td data-label="By">{{transaction.by}}</td>
+
+            </tr>
+
+        </tbody>
+    </table>
+    <br>
+</div>

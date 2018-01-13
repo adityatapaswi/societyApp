@@ -1,0 +1,66 @@
+<ng-include src="'templates/menu.html'"></ng-include>
+
+<div class="container" ng-controller="DashboardController">
+    <ng-include src="'templates/birthdays.html'"></ng-include>
+    <ng-include src="'templates/events.html'"></ng-include>
+    <div class="right">
+        <div>
+            <button class="btn btn-default green-circle-button" title="Add Post"  ng-click="gotoAdd();"><i class="fa fa-lg fa-plus"></i></button>
+
+        </div>   
+    </div>
+    <br>
+    <div class="card-timeline radius shadowDepth1" ng-repeat="event in timeline">
+        <div class="card__image border-tlr-radius">
+            <img src="https://blogs.vmware.com/networkvirtualization/files/2017/01/News-Image.jpg" alt="{{event.eventType}}" class="border-tlr-radius">
+        </div>
+
+        <div class="card__content card__padding">
+            <div class="card__share">
+                <div class="card__social">  
+                    <a class="share-icon facebook" href="#"><span class="fa fa-facebook"></span></a>
+                    <a class="share-icon twitter" href="#"><span class="fa fa-twitter"></span></a>
+                    <a class="share-icon googleplus" href="#"><span class="fa fa-google-plus"></span></a>
+                </div>
+
+                <a id="share" class="share-toggle share-icon" href="#"></a>
+            </div>
+
+            <div class="card__meta">
+                <a href="">{{event.eventType}}</a>
+                <time>{{event.date}}</time>
+            </div>
+
+            <article class="card__article">
+                <h2><a href="#">{{event.title}}</a></h2>
+
+                <p>{{event.description}}</p>
+            </article>
+        </div>
+
+        <div class="card__action">
+
+            <div class="card__author">
+                <img src="https://smilestream.com/Content/userimages/default-avatar.png" height="50" width="50" alt="user">
+                <div class="card__author-content">
+                    By <a href="#">{{event.by}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+<script>
+    $(document).ready(function ($) {
+
+        $('.card__share > a').on('click', function (e) {
+            e.preventDefault() // prevent default action - hash doesn't appear in url
+            $(this).parent().find('div').toggleClass('card__social--active');
+            $(this).toggleClass('share-expanded');
+        });
+
+    });
+
+</script>

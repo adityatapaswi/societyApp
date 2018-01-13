@@ -1,0 +1,14 @@
+<div ng-controller="BirthdayAnniversaryController">
+    <h2>Birthdays And Anniversaries</h2>
+    <div id="mainbox" >
+
+        <div class="card-birthday" ng-repeat="ba in birthdaysAndAnniversaries">
+            <img ng-show="ba.eventType === 'birthday'" src="https://image.freepik.com/free-vector/happy-birthday-background_1344-43.jpg" alt="{{ba.eventType}}" />
+            <img ng-show="ba.eventType === 'anniversary'" src="http://www.hdwallpapersz.in/wp-content/uploads/2015/12/happy-anniversary-images-download-cake.jpg" alt="{{ba.eventType}}" />
+            
+            <h1><br class="hidden-lg hidden-md"><br class="hidden-lg hidden-md">{{ba.title}}</h1>
+            <p class="right">{{ba.date}}</p>
+        </div>
+    </div>
+    <hr>
+</div>
