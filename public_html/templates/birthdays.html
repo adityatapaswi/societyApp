@@ -1,13 +1,14 @@
-<div ng-controller="BirthdayAnniversaryController">
+<div ng-controller="BirthdayAnniversaryController" ng-show="birthdaysAndAnniversaries.length">
     <h2>Birthdays And Anniversaries</h2>
     <div id="mainbox" >
 
-        <div class="card-birthday" ng-repeat="ba in birthdaysAndAnniversaries">
-            <img ng-show="ba.eventType === 'birthday'" src="https://image.freepik.com/free-vector/happy-birthday-background_1344-43.jpg" alt="{{ba.eventType}}" />
-            <img ng-show="ba.eventType === 'anniversary'" src="http://www.hdwallpapersz.in/wp-content/uploads/2015/12/happy-anniversary-images-download-cake.jpg" alt="{{ba.eventType}}" />
+        <div class="card-birthday" ng-repeat="ba in birthdaysAndAnniversaries" ng-class="{today: ba.days_remaining==0}">
+            <img ng-show="ba.type === 'birthday'" src="img/birthday.jpg" alt="{{ba.type}}" />
+            <img ng-show="ba.type=== 'anniversary'" src="img/anniversary.jpg" alt="{{ba.type}}" />
             
-            <h1><br class="hidden-lg hidden-md"><br class="hidden-lg hidden-md">{{ba.title}}</h1>
-            <p class="right">{{ba.date}}</p>
+            <h1><br class="hidden-lg hidden-md"><br class="hidden-lg hidden-md">{{ba.name}}</h1>
+            <p class="right" ng-hide="ba.days_remaining==0">{{ba.days_remaining==1?'Tommorow':ba.days_remaining<6? (ba.days_remaining+' days remaining'):ba.date}} </p>
+            <p class="right" ng-show="ba.days_remaining==0">Today</p>
         </div>
     </div>
     <hr>

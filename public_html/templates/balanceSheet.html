@@ -1,6 +1,6 @@
 <ng-include src="'templates/menu.html'"></ng-include>
 
-<div class="container" ng-controller="BalanceSheetController">
+<div class="container" ng-controller="BalanceSheetController" ng-init="getTransactions();">
     <div>
         <h2>Summary</h2>
         <div id="mainbox" >
@@ -8,7 +8,7 @@
             <div class="card-birthday" ng-repeat="s in summary">
                 <!--<img ng-show="ba.eventType === 'birthday'" src="https://image.freepik.com/free-vector/happy-birthday-background_1344-43.jpg" alt="{{ba.eventType}}" />-->
                 <!--<img ng-show="ba.eventType === 'anniversary'" src="http://www.hdwallpapersz.in/wp-content/uploads/2015/12/happy-anniversary-images-download-cake.jpg" alt="{{ba.eventType}}" />-->
-                <h2>{{s.title}}</h2>
+                <h2>{{s.type}}</h2>
                 <p class="right">{{s.amt}}</p>
             </div>
         </div>
@@ -29,18 +29,15 @@
                 <th scope="col">Description</th>
                 <th scope="col">Amount</th>
                 <th scope="col">Type</th>
-                <th scope="col">By</th>
-            </tr>
+                </tr>
         </thead>
         <tbody>
             <tr ng-repeat="transaction in transactions">
-                <td data-label="Transaction Id">{{transaction.tid}}</td>
+                <td data-label="Transaction Id">{{transaction.id}}</td>
                 <td data-label="Date">{{transaction.date}}</td>
-                <td data-label="Description">{{transaction.desc}}</td>
+                <td data-label="Description">{{transaction.description}}</td>
                 <td data-label="Amount">{{transaction.amt}}</td>
                 <td data-label="Type"><span class="green" ng-class="{red: transaction.type === 'DB'}">{{transaction.type}}</span></td>
-                <td data-label="By">{{transaction.by}}</td>
-
             </tr>
 
         </tbody>

@@ -1,4 +1,4 @@
-var recomApp = angular.module('app.recomsys', ['ngCookies', 'ngResource', 'ngRoute', "ngTable", 'ngFileSaver', 'ngMessages', 'app.recomsys.sub', 'ngSanitize', 'selectize', '720kb.datepicker', 'ui.bootstrap', 'chart.js', 'ngAlertify', 'angular-thumbnails']);
+var recomApp = angular.module('app.recomsys', ['ngCookies', 'file-model', 'ngResource', 'ngRoute', "ngTable", 'ngFileSaver', 'ngMessages', 'app.recomsys.sub', 'ngSanitize', 'selectize', '720kb.datepicker', 'ui.bootstrap', 'chart.js', 'ngAlertify', 'angular-thumbnails']);
 recomApp.config(
         function ($compileProvider)
         {
@@ -15,21 +15,21 @@ recomApp.run(function ($rootScope, $route, $location, $cookieStore, $templateCac
 
         //On refreshing page, keeps username of logged in user
         //On refreshing page, keeps username of logged in user
-        if ($cookieStore.get("recomApp")) {
+        if ($cookieStore.get("societyApp")) {
             $rootScope.$broadcast('showUserName', {
                 show: true
             });
         }
         else
         {
-             $rootScope.$broadcast('showUserName', {
+            $rootScope.$broadcast('showUserName', {
                 show: false
             });
         }
 
-        var restrictedPage = $.inArray($location.path(), ['/home', '/login', '/signup','/contactUs']) === -1;
+        var restrictedPage = $.inArray($location.path(), ['/home', '/login', '/signup', '/contactUs']) === -1;
 
-        if (restrictedPage && (!$cookieStore.get("recomApp")))
+        if (restrictedPage && (!$cookieStore.get("societyApp")))
         {
             $location.path('/home');
         }
@@ -42,54 +42,74 @@ recomApp.config(['$routeProvider', '$locationProvider',
                 when('/#', {
                     templateUrl: 'templates/base.html',
                     activetab: 'Home'
-                }).when('/home', {
-            templateUrl: 'templates/base.html',
-            activetab: 'Home'
-        }).when('/login', {
-            templateUrl: 'templates/login.html',
-            activetab: 'Home'
-        }).when('/signup', {
-            templateUrl: 'templates/signup.html',
-            activetab: 'Home'
-        }).when('/home/dashboard', {
-            templateUrl: 'templates/dashboard.html',
-            activetab: 'Home'
-        }).when('/contactUs', {
-            templateUrl: 'templates/contactUs.html',
-            activetab: 'Home'
-        }).when('/manageSocietyMembers', {
-            templateUrl: 'templates/manageSocietyMembers.html',
-            activetab: 'Home'
-        }).when('/discussions', {
-            templateUrl: 'templates/discussions.html',
-            activetab: 'Home'
-        }).when('/openDiscussion', {
-            templateUrl: 'templates/openDiscussion.html',
-            activetab: 'Home'
-        }).when('/discussionRoom', {
-            templateUrl: 'templates/discussionRoom.html',
-            activetab: 'Home'
-        }).when('/addSocietyMembers', {
-            templateUrl: 'templates/addSocietyMember.html',
-            activetab: 'Home'
-        }).when('/balanceSheet', {
-            templateUrl: 'templates/balanceSheet.html',
-            activetab: 'Home'
-        }).when('/photoGallery', {
-            templateUrl: 'templates/photoGallery.html',
-            activetab: 'Home'
-        }).when('/addPhoto', {
-            templateUrl: 'templates/addPhoto.html',
-            activetab: 'Home'
-        }).when('/addEvent', {
-            templateUrl: 'templates/addEvent.html',
-            activetab: 'Home'
-        }).when('/addTransaction', {
-            templateUrl: 'templates/addTransaction.html',
-            activetab: 'Home'
-        }).otherwise({
-            redirectTo: '/home'
-        });
+                })
+                .when('/home', {
+                    templateUrl: 'templates/base.html',
+                    activetab: 'Home'
+                })
+                .when('/login', {
+                    templateUrl: 'templates/login.html',
+                    activetab: 'Home'
+                })
+                .when('/signup', {
+                    templateUrl: 'templates/signup.html',
+                    activetab: 'Home'
+                })
+                .when('/home/dashboard', {
+                    templateUrl: 'templates/dashboard.html',
+                    activetab: 'Home'
+                })
+                .when('/contactUs', {
+                    templateUrl: 'templates/contactUs.html',
+                    activetab: 'Home'
+                })
+                .when('/manageSocietyMembers', {
+                    templateUrl: 'templates/manageSocietyMembers.html',
+                    activetab: 'Home'
+                })
+                .when('/discussions', {
+                    templateUrl: 'templates/discussions.html',
+                    activetab: 'Home'
+                })
+                .when('/openDiscussion', {
+                    templateUrl: 'templates/openDiscussion.html',
+                    activetab: 'Home'
+                })
+                .when('/discussionRoom', {
+                    templateUrl: 'templates/discussionRoom.html',
+                    activetab: 'Home'
+                })
+                .when('/addSocietyMembers', {
+                    templateUrl: 'templates/addSocietyMember.html',
+                    activetab: 'Home'
+                })
+                .when('/balanceSheet', {
+                    templateUrl: 'templates/balanceSheet.html',
+                    activetab: 'Home'
+                })
+                .when('/photoGallery', {
+                    templateUrl: 'templates/photoGallery.html',
+                    activetab: 'Home'
+                })
+                .when('/addPhoto', {
+                    templateUrl: 'templates/addPhoto.html',
+                    activetab: 'Home'
+                })
+                .when('/addEvent', {
+                    templateUrl: 'templates/addEvent.html',
+                    activetab: 'Home'
+                })
+                .when('/addTransaction', {
+                    templateUrl: 'templates/addTransaction.html',
+                    activetab: 'Home'
+                })
+                .when('/addPost', {
+                    templateUrl: 'templates/addWallPost.html',
+                    activetab: 'Home'
+                })
+                .otherwise({
+                    redirectTo: '/home'
+                });
 
     }]);
 
@@ -156,21 +176,7 @@ recomApp.directive('loading', ['$http', function ($http)
             }
         };
     }]);
-recomApp.constant('CONSTANTS', (function () {
-    // Define your variable
-    var CONSTANTS = {};
-    var SERVICES = {
-//        BASE_PATH: 'http://ec2-54-169-136-45.ap-southeast-1.compute.amazonaws.com/api/fm/v0/'
-        BASE_PATH: 'http://ec2-52-77-243-65.ap-southeast-1.compute.amazonaws.com/api/fm/v0/'
-//        BASE_PATH: 'http://192.168.1.115:8080/api/fm/v0/'
-                // 'http://localhost:8080/api/fm/v0/' //'http://ec2-52-74-20-101.ap-southeast-1.compute.amazonaws.com/api/fm/v0/' 
-    };
-    SERVICES.USERS = SERVICES.BASE_PATH + 'users';
 
-    CONSTANTS.SERVICES = SERVICES;
-    // Use the variable in your constants
-    return CONSTANTS;
-})());
 (function () {
     'use strict';
     // attach utilities as a property of window

@@ -1,5 +1,5 @@
 <ng-include src="'templates/menu.html'"></ng-include>
-<div class="container" ng-controller="PhotoGalleryController">
+<div class="container" ng-controller="PhotoGalleryController" ng-init="getPhotos();">
     <div class="row" style="text-align:center; border-bottom:1px dashed #ccc;  padding:0 0 20px 0; margin-bottom:40px;">
 
         <h3 style="font-family:'Bree Serif', arial;color: #147014; font-weight:bold; font-size:30px;">
@@ -19,25 +19,32 @@
 
             <div class="gallery" ng-repeat="img in images">
                 <a data-toggle="modal" data-target="#myModal" ng-click="selectImage(img)">
-                    <img id="myImg" class="img-thumb" src="{{img.img}}" alt="{{img.title}}" width="300" height="200">
+                    <img id="myImg" class="img-thumb" src="{{imgUrl + img.image_url}}" alt="{{img.title}}" width="300" height="200">
 
-                    <div class="desc">{{img.desc}}</div>
+                    <div class="desc">{{img.title}}</div>
                 </a>
                 <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" ng-controller="PhotoGalleryController">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-body center">
-                                
-                                <img class="modal-image" ng-src="{{photo.img}}">
-                                <div class="right time">{{photo.date}}</div>
+                                <img class="modal-image" ng-src="{{imgUrl + photo.image_url}}">
                                 <article class="card__article">
+                                <div class="row">
+                                    <div class="col-lg-6 left time">
+                                        By:{{photo.uploader}}
+                                    </div>
+                                    <div class="col-lg-6 right time">
+                                        On:{{photo.uploaded_on}}
+                                    </div>
+                                </div>     
                                     <h2><a href="">{{photo.title}}</a></h2>
 
-                                    <p>{{photo.desc}}</p>
+                                    <p>{{photo.description}}</p>
+
                                 </article>
                                 <!--                                <div id="caption"></div>
                                                                 <div id="caption"></div>-->
-                                
+
                             </div>
                         </div>
                     </div>

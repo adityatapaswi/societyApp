@@ -1,6 +1,6 @@
 <ng-include src="'templates/menu.html'"></ng-include>
 
-<div class="container" ng-controller="DiscussionController">
+<div class="container" ng-controller="DiscussionController"ng-init="getDisscussion()">
     <div class="right">
         <div class="col-md-12">
             <button class="btn btn-default green-circle-button" title="Open Discussion"  ng-click="gotoAdd();"><i class="fa fa-lg fa-plus"></i></button>
@@ -20,8 +20,8 @@
         <tbody>
             <tr ng-repeat="discussion in discussions">
                 <td data-label="Name">{{discussion.name}}</td>
-                <td data-label="Started By">{{discussion.by}}</td>
-                <td data-label="Started On">{{discussion.on}}</td>
+                <td data-label="Started By">{{discussion.byName}}</td>
+                <td data-label="Started On">{{formatDate(discussion.date_date)}}</td>
                 <td data-label="Action">
                     <button class="btn btn-info" title="View Discussions" ng-click="viewDiscussion()"><i class="fa fa-lg fa-eye"></i></button>
                     <button class="btn btn-danger" title="Close Discussions"><i class="fa fa-lg fa-trash-o"></i></button>

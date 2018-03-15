@@ -1,6 +1,6 @@
 <ng-include src="'templates/menu.html'"></ng-include>
 
-<div class="container" ng-controller="ManageSocietyMembersController">
+<div class="container" ng-controller="ManageSocietyMembersController" ng-init="getMembers();">
     <div class="right">
         <div class="col-md-12">
             <button class="btn btn-default green-circle-button" title="Register Member"  ng-click="gotoAdd();"><i class="fa fa-lg fa-plus"></i></button>
@@ -14,17 +14,21 @@
                 <th scope="col">Name</th>
                 <th scope="col">Email</th>
                 <th scope="col">Phone</th>
-                <th scope="col">Address</th>
                 <th scope="col">Action</th>
+                <th scope="col">Type</th>
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="member in members">
+            <tr ng-repeat="member in members" ng-class="{green: member.type == 'chairman'}">
                 <td data-label="Name">{{member.name}}</td>
                 <td data-label="Email">{{member.email}}</td>
                 <td data-label="Phone">{{member.phone}}</td>
-                <td data-label="Address">{{member.address}}</td>
-                <td data-label="Action"><button class="btn btn-info">Reset Pass</button></td>
+                <td data-label="Type">{{member.type| titlecase}}</td>
+                <td data-label="Action">
+                    <button class="btn btn-info">Reset Pass</button>
+                    <button class="btn btn-danger" title="Delete Member"><i class="fa fa-lg fa-trash-o"></i></button>
+
+                </td>
             </tr>
 
         </tbody>

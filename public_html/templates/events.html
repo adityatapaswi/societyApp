@@ -1,4 +1,4 @@
-<div ng-controller="EventController">
+<div ng-controller="EventController" >
     <h2>Upcoming Events</h2>
      <div class="right">
         <div>
@@ -6,14 +6,13 @@
 
         </div>   
     </div>
-    <div id="mainbox" >
+    <div id="mainbox" ng-show="events.length">
 
-        <div class="card-birthday" ng-repeat="event in events">
-<!--            <img ng-show="ba.eventType === 'birthday'" src="https://image.freepik.com/free-vector/happy-birthday-background_1344-43.jpg" alt="{{ba.eventType}}" />
-            <img ng-show="ba.eventType === 'anniversary'" src="http://www.hdwallpapersz.in/wp-content/uploads/2015/12/happy-anniversary-images-download-cake.jpg" alt="{{ba.eventType}}" />-->
-            
+        <div class="card-birthday" ng-repeat="event in events"  ng-class="{today: event.days_remaining==0}" >
+           
             <h2>{{event.title}}</h2>
-            <p class="right">{{event.date}}</p>
+            <p class="right" ng-hide="event.days_remaining==0">{{event.days_remaining==1?'Tommorow':event.days_remaining<6? (event.days_remaining+' day(s) remaining'):event.date}} </p>
+            <p class="right" ng-show="event.days_remaining==0">Today</p>
         </div>
     </div>
     <hr>
