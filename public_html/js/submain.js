@@ -52,6 +52,44 @@ recomSubApp.controller('PostWallController', function ($scope, userService, aler
 
     };
 });
+recomSubApp.controller('RedirectController', function ($scope, alertify, $location, utilService, userService, objTransferService, $http, CONSTANTS) {
+    $scope.user = userService.getUser();
+    $scope.payment = objTransferService.getObjUsingCookie();
+    $scope.trans = {};
+    if ($scope.payment && $scope.payment.amount && $location.$$search.payment_id)
+    {
+        $scope.trans.date = utilService.formatDate(new Date());
+        $scope.trans.date_date = utilService.formatDate_Date(new Date());
+        $scope.trans.sid = $scope.user.sid;
+        $scope.trans.desc = $scope.payment.purpose;
+        $scope.trans.amt = $scope.payment.amount;
+        $scope.trans.by = $scope.user.id;
+        $scope.trans.view = CONSTANTS.VIEW.ADDTRANSACTION;
+        $scope.trans.type = "CR";
+        $.post(CONSTANTS.SERVICES.APIURL, $scope.trans)
+                .success(function (data) {
+                    if (data.reply.includes('Successfully'))
+                    {
+                        alertify.logPosition("top center");
+                        alertify.success(data.reply);
+                        $location.path('/balanceSheet');
+                    }
+                    else
+                    {
+                        alertify.logPosition("top center");
+                        alertify.error(data.reply);
+                    }
+                    if (!$scope.$$phase)
+                        $scope.$apply();
+                }).error(function (xhr, status, error) {
+            // error handling
+            if (error !== undefined) {
+                alertify.logPosition("top center");
+                alertify.error("Something went wrong");
+            }
+        });
+    }
+});
 recomSubApp.controller('AddSocietyMemberController', function ($scope, userService, alertify, utilService, $location, $window, $cookieStore, $http, CONSTANTS) {
     $scope.u = userService.getUser();
     $scope.addMember = function () {
@@ -216,7 +254,7 @@ recomSubApp.controller('ManageSocietyMembersController', function ($scope, userS
     $scope.members = [];
     $scope.getMembers = function ()
     {
-         $.post(CONSTANTS.SERVICES.APIURL, {id: $scope.user.sid, view: CONSTANTS.VIEW.GETMEMBERS})
+        $.post(CONSTANTS.SERVICES.APIURL, {id: $scope.user.sid, view: CONSTANTS.VIEW.GETMEMBERS})
                 .success(function (data) {
                     $scope.members = data;
                     if (!$scope.$$phase)
@@ -303,11 +341,110 @@ recomSubApp.controller('BalanceSheetController', function ($scope, userService, 
         $location.path('/addTransaction');
     };
 });
+recomSubApp.controller('PaymentsController', function ($scope, $location, userService, $window, objTransferService, CONSTANTS) {
+    $scope.user = userService.getUser();
+    $scope.payment = objTransferService.getObj() || {};
+    $scope.response;
+    if ($scope.payment && $scope.payment.monthly_maintainance) {
+        $scope.payment.monthly_maintainance = parseInt($scope.payment.monthly_maintainance);
+    }
+    $scope.payRequest = function () {
+        $scope.payment.phone = $scope.user.phone;
+        $scope.payment.email = $scope.user.email;
+        $scope.payment.name = $scope.user.name;
+        $scope.payment.view = CONSTANTS.VIEW.MAKEPAYMENT;
+
+        if ($scope.paymentType === 'mm')
+        {
+            $scope.payment.amount = $scope.payment.monthly_maintainance;
+            $scope.payment.purpose = "Monthly Maintenance";
+
+        }
+        $.post(CONSTANTS.SERVICES.APIURL, $scope.payment)
+                .success(function (data) {
+                    $scope.reponse = JSON.parse(data);
+                    objTransferService.setObjUsingCookie($scope.payment);
+                    $window.location.href = $scope.reponse.payment_request.longurl;
+                    if (!$scope.$$phase)
+                        $scope.$apply();
+                })
+                .error(function (xhr, status, error) {
+                    // error handling
+                    if (error !== undefined) {
+                        alertify.logPosition("top center");
+                        alertify.error("Something Went Wrong");
+
+
+                    }
+
+                });
+
+    };
+    $scope.getConfig = function () {
+        $scope.payment.id = $scope.user.sid;
+        $scope.payment.view = CONSTANTS.VIEW.GETPAYMENTCONFIGURATION;
+        $.post(CONSTANTS.SERVICES.APIURL, $scope.payment)
+                .success(function (data) {
+                    $scope.payment = data;
+                    if (!$scope.$$phase)
+                        $scope.$apply();
+                })
+                .error(function (xhr, status, error) {
+                    // error handling
+                    if (error !== undefined) {
+                        alertify.logPosition("top center");
+                        alertify.error("Payment Not Configured");
+                        if ($scope.user.type === 'chairman')
+                            $scope.gotoSetPayConfig();
+                        else
+                        {
+                            alertify.logPosition("top center");
+                            alertify.error("Please Inform Your Chairman To Enable Online Payment");
+                            $location.path('/home/dashboard');
+                        }
+
+                        if (!$scope.$$phase)
+                            $scope.$apply();
+
+                    }
+
+                });
+
+    };
+    $scope.configure = function () {
+        $scope.payment.sid = $scope.user.sid;
+        $scope.payment.view = CONSTANTS.VIEW.SETPAYMENTCONFIGURATION;
+        $.post(CONSTANTS.SERVICES.APIURL, $scope.payment)
+                .success(function (data) {
+                    if (data.includes('Successfully'))
+                        $location.path('/makePayments');
+                    if (!$scope.$$phase)
+                        $scope.$apply();
+                })
+                .error(function (xhr, status, error) {
+                    // error handling
+                    if (error !== undefined) {
+                        alertify.logPosition("top center");
+                        alertify.error("Payment Not Configured");
+                        $scope.gotoSetPayConfig();
+                        if (!$scope.$$phase)
+                            $scope.$apply();
+
+                    }
+
+                });
+
+    };
+    $scope.gotoSetPayConfig = function ()
+    {
+        objTransferService.setObj($scope.payment);
+        $location.path('/setPaymentsConfiguraation');
+    };
+});
 recomSubApp.controller('DiscussionController', function ($scope, $location, userService, utilService, $http, CONSTANTS) {
-   $scope.user=userService.getUser();
+    $scope.user = userService.getUser();
     $scope.dicussionName = "Water Leakage";
     $scope.discussions = [
-        
     ];
     $scope.messages = [
         {
@@ -330,13 +467,13 @@ recomSubApp.controller('DiscussionController', function ($scope, $location, user
         }
 
     ];
-    $scope.formatDate= function (dateStr){
+    $scope.formatDate = function (dateStr) {
         return utilService.formatDate(new Date(dateStr));
     };
-    $scope.getDisscussion= function (){
-     $.post(CONSTANTS.SERVICES.APIURL, {id:$scope.user.sid,view:CONSTANTS.VIEW.GETDISCUSSIONS})
+    $scope.getDisscussion = function () {
+        $.post(CONSTANTS.SERVICES.APIURL, {id: $scope.user.sid, view: CONSTANTS.VIEW.GETDISCUSSIONS})
                 .success(function (data) {
-                  $scope.discussions=data;
+                    $scope.discussions = data;
                     if (!$scope.$$phase)
                         $scope.$apply();
                 })
@@ -352,11 +489,11 @@ recomSubApp.controller('DiscussionController', function ($scope, $location, user
                 });
 
     };
-    $scope.addDisscussion= function (){
-        $scope.discussion.by=$scope.user.id;
-        $scope.discussion.sid=$scope.user.sid;
-        $scope.discussion.view=CONSTANTS.VIEW.ADDDISCUSSION;
-         $.post(CONSTANTS.SERVICES.APIURL, $scope.discussion)
+    $scope.addDisscussion = function () {
+        $scope.discussion.by = $scope.user.id;
+        $scope.discussion.sid = $scope.user.sid;
+        $scope.discussion.view = CONSTANTS.VIEW.ADDDISCUSSION;
+        $.post(CONSTANTS.SERVICES.APIURL, $scope.discussion)
                 .success(function (data) {
                     if (data.reply) {
                         if (data.reply.includes('Successfully'))
@@ -533,7 +670,7 @@ recomSubApp.controller('LoginController', function ($scope, userService, alertif
                     //This adds user object in userService
 //                userService.addUser($user);
 
-                 //set cookie expiry (works when page is refreshed by user)
+                    //set cookie expiry (works when page is refreshed by user)
                     var now = new $window.Date(), //get the current date
                             // this will set the expiration to 1 hour
                             exp = new $window.Date(now.getDate() + 1);
@@ -617,25 +754,35 @@ recomApp.service('objTransferService', function ($cookieStore) {
         obj = newObj;
         //$cookies.put("futuremaker", $user);
     };
+    var setObjUsingCookie = function (newObj) {
+
+        $cookieStore.put("object", newObj);
+    };
     var getObj = function () {
         //$user = $cookies.get("futuremaker",$user);
         return obj;
     };
+    var getObjUsingCookie = function () {
+        //$user = $cookies.get("futuremaker",$user);
+        return $cookieStore.get("object");
+    };
     return {
         setObj: setObj,
+        setObjUsingCookie: setObjUsingCookie,
+        getObjUsingCookie: getObjUsingCookie,
         getObj: getObj
     };
 });
-recomSubApp.filter('titlecase', function() {
+recomSubApp.filter('titlecase', function () {
     return function (input) {
         var smallWords = /^(a|an|and|as|at|but|by|en|for|if|in|nor|of|on|or|per|the|to|vs?\.?|via)$/i;
 
         input = input.toLowerCase();
-        return input.replace(/[A-Za-z0-9\u00C0-\u00FF]+[^\s-]*/g, function(match, index, title) {
+        return input.replace(/[A-Za-z0-9\u00C0-\u00FF]+[^\s-]*/g, function (match, index, title) {
             if (index > 0 && index + match.length !== title.length &&
-                match.search(smallWords) > -1 && title.charAt(index - 2) !== ":" &&
-                (title.charAt(index + match.length) !== '-' || title.charAt(index - 1) === '-') &&
-                title.charAt(index - 1).search(/[^\s-]/) < 0) {
+                    match.search(smallWords) > -1 && title.charAt(index - 2) !== ":" &&
+                    (title.charAt(index + match.length) !== '-' || title.charAt(index - 1) === '-') &&
+                    title.charAt(index - 1).search(/[^\s-]/) < 0) {
                 return match.toLowerCase();
             }
 
@@ -672,8 +819,11 @@ recomApp.constant('CONSTANTS', (function () {
         ADDTRANSACTION: 'add transactions',
         GETSUMMARY: 'get summary',
         GETMEMBERS: 'get members',
-        ADDDISCUSSION:'create discussion',
-        GETDISCUSSIONS:'get discussions'
+        ADDDISCUSSION: 'create discussion',
+        GETDISCUSSIONS: 'get discussions',
+        MAKEPAYMENT: 'make payment',
+        GETPAYMENTCONFIGURATION: 'get payment configuration',
+        SETPAYMENTCONFIGURATION: 'set payment configuration'
     };
 
     CONSTANTS.SERVICES = SERVICES;

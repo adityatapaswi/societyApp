@@ -99,6 +99,18 @@ recomApp.config(['$routeProvider', '$locationProvider',
                     templateUrl: 'templates/addEvent.html',
                     activetab: 'Home'
                 })
+                .when('/makePayments', {
+                    templateUrl: 'templates/makePayments.html',
+                    activetab: 'Home'
+                })
+                .when('/setPaymentsConfiguraation', {
+                    templateUrl: 'templates/paymentConfiguration.html',
+                    activetab: 'Home'
+                })
+                .when('/paymentRedirect', {
+                    templateUrl: 'templates/paymentRedirect.html',
+                    activetab: 'Home'
+                })
                 .when('/addTransaction', {
                     templateUrl: 'templates/addTransaction.html',
                     activetab: 'Home'

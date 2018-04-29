@@ -1,0 +1,46 @@
+<ng-include src="'templates/menu.html'"></ng-include>
+
+<div class="container" ng-controller="PaymentsController" ng-init="getConfig()">
+    <div class="right">
+        <div class="col-md-12">
+            <button class="btn btn-default green-circle-button" title="Set Payment Configuration"  ng-click="gotoSetPayConfig();"><i class="fa fa-lg fa-plus"></i></button>
+
+        </div>
+    </div>
+    <br>
+    <br>
+    <br>
+    <div class="card-timeline radius shadowDepth1">
+        <div class="card__content card__padding">
+            <div class="card__meta">
+                <a href=""> Select Your Payment Type</a>
+                <!--<time>{{event.date}}</time>-->
+            </div>
+
+            <div>
+                <input type="radio" name="type" ng-model="paymentType" value="mm" /> Monthly Maintenance
+                <input type="radio" name="type" ng-model="paymentType" value="custom" /> Custom
+            </div>
+            <div ng-show="paymentType === 'mm'">
+                <p>Pay Monthly Maintenance of &#8377; {{payment.monthly_maintainance}}</p>
+                <button class="btn btn-primary" ng-click="payRequest()">Pay</button>
+            </div>
+            <div ng-show="paymentType === 'custom'">
+                <br/>
+                <form ng-submit="payRequest();">
+                    <div>
+                        <div class="form-group">
+                            <strong>Purpose(30 characters max)</strong>
+                            <input type="text" placeholder="Enter Payment Description Here.." maxlength="30" class="form-control" ng-model="payment.purpose" required="">
+                        </div>					
+                        <div class="form-group">
+                            <strong>Amount</strong>
+                            <input type="text" placeholder="Enter Amount Here.." class="form-control" ng-model="payment.amount" required="">
+                        </div>					
+                        <button class="btn btn-primary" type="submit">Pay</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
