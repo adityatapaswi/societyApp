@@ -441,34 +441,80 @@ recomSubApp.controller('PaymentsController', function ($scope, $location, userSe
         $location.path('/setPaymentsConfiguraation');
     };
 });
-recomSubApp.controller('DiscussionController', function ($scope, $location, userService, utilService, $http, CONSTANTS) {
+recomSubApp.controller('DiscussionController', function ($scope, $location, objTransferService, userService, utilService, $http, CONSTANTS) {
     $scope.user = userService.getUser();
+    $scope.pagination = {
+        limit: 5,
+        offset: 0
+    };
     $scope.dicussionName = "Water Leakage";
     $scope.discussions = [
     ];
-    $scope.messages = [
-        {
-            msg: "Waterasd asda sda sd asd asd asd as dasd asd  Leakage",
-            from: "Sanket Bade",
-            on: "20 Nov 2017 2:00 pm"
-
-        },
-        {
-            msg: "Watera sd asd as dasd as dasdasd asdas a Leakage",
-            from: "Sanket Bade",
-            on: "20 Nov 2017 2:01 pm"
-
-        },
-        {
-            msg: "Ok\nGot It",
-            from: "Aditya Tapaswi",
-            on: "20 Nov 2017"
-
-        }
-
-    ];
+    $scope.messages = [];
     $scope.formatDate = function (dateStr) {
-        return utilService.formatDate(new Date(dateStr));
+        if (utilService.datediff(dateStr) < 1)
+            return "Today";
+        else if (utilService.datediff(dateStr) < 2)
+            return "Yesterday";
+        else
+            return utilService.formatChatDate(new Date(dateStr));
+    };
+    $scope.getOlderMessage = function () {
+        $scope.pagination.offset = $scope.pagination.offset + $scope.pagination.limit;
+        $scope.getMessages();
+    };
+    $scope.getMessages = function () {
+        if (!$scope.discussion) {
+            $scope.discussion = objTransferService.getObj();
+        }
+        if ($scope.discussion.id) {
+            $.post(CONSTANTS.SERVICES.APIURL, {id: $scope.discussion.id, limit: $scope.pagination.limit, offset: $scope.pagination.offset, view: CONSTANTS.VIEW.GETMESSAGE})
+                    .success(function (data) {
+                        $scope.messages = $scope.messages.concat(data);
+                        $scope.last_msg = $scope.messages[0].id;
+                        if (!$scope.$$phase)
+                            $scope.$apply();
+                    })
+                    .error(function (xhr, status, error) {
+                        // error handling
+                        if (error !== undefined) {
+                            alertify.logPosition("top center");
+                            alertify.error("No More Messages");
+
+
+                        }
+
+                    });
+        }
+        else
+            $location.path('/discussions');
+
+    };
+    $scope.addMessage = function () {
+        $.post(CONSTANTS.SERVICES.APIURL, {did: $scope.discussion.id, by_id: $scope.user.id, msg: $scope.msg, view: CONSTANTS.VIEW.ADDMESSAGE})
+                .success(function (data) {
+                    if (data.includes('Success')) {
+                        $scope.pagination = {
+                            limit: 5,
+                            offset: 0
+                        };
+                        $scope.messages = [];
+                        $scope.msg = "";
+                        $scope.getMessages();
+                    }
+                    if (!$scope.$$phase)
+                        $scope.$apply();
+                })
+                .error(function (xhr, status, error) {
+                    // error handling
+                    if (error !== undefined) {
+                        alertify.logPosition("top center");
+                        alertify.error("Something went wrong");
+
+
+                    }
+
+                });
     };
     $scope.getDisscussion = function () {
         $.post(CONSTANTS.SERVICES.APIURL, {id: $scope.user.sid, view: CONSTANTS.VIEW.GETDISCUSSIONS})
@@ -488,6 +534,10 @@ recomSubApp.controller('DiscussionController', function ($scope, $location, user
 
                 });
 
+    };
+    $scope.formatTime = function (time)
+    {
+        return utilService.formatTime(new Date(time));
     };
     $scope.addDisscussion = function () {
         $scope.discussion.by = $scope.user.id;
@@ -525,8 +575,9 @@ recomSubApp.controller('DiscussionController', function ($scope, $location, user
                 });
 
     };
-    $scope.viewDiscussion = function ()
+    $scope.viewDiscussion = function (disc)
     {
+        objTransferService.setObj(disc);
         $location.path('/discussionRoom');
     };
     $scope.gotoAdd = function ()
@@ -696,6 +747,15 @@ recomSubApp.controller('LoginController', function ($scope, userService, alertif
     };
 
 });
+recomSubApp.directive('scrollIf', function () {
+    return function (scope, element, attributes) {
+        setTimeout(function () {
+            if (scope.$eval(attributes.scrollIf)) {
+                window.scrollTo(0, element[0].offsetTop - 100)
+            }
+        });
+    }
+});
 recomApp.directive('loading', ['$http', function ($http)
     {
         return {
@@ -735,6 +795,16 @@ recomApp.service('utilService', ['$filter', function ($filter) {
         var formatDate = function (date) {
             return  $filter('date')(date, "dd MMM yyyy");
         };
+        var datediff = function (date) {
+            var d1 = new Date(date);
+            var d2 = new Date();
+            var timeDiff = d2.getTime() - d1.getTime();
+            var DaysDiff = timeDiff / (1000 * 3600 * 24);
+            return DaysDiff;
+        }
+        var formatChatDate = function (date) {
+            return  $filter('date')(date, "dd MMM");
+        };
         var formatDate_Date = function (date) {
             return  $filter('date')(date, "yyyy-MM-dd");
         };
@@ -745,7 +815,9 @@ recomApp.service('utilService', ['$filter', function ($filter) {
         return {
             formatDate_Date: formatDate_Date,
             formatDate: formatDate,
-            formatTime: formatTime
+            formatTime: formatTime,
+            formatChatDate: formatChatDate,
+            datediff: datediff
         };
     }]);
 recomApp.service('objTransferService', function ($cookieStore) {
@@ -771,6 +843,11 @@ recomApp.service('objTransferService', function ($cookieStore) {
         setObjUsingCookie: setObjUsingCookie,
         getObjUsingCookie: getObjUsingCookie,
         getObj: getObj
+    };
+});
+recomSubApp.filter('reverse', function () {
+    return function (items) {
+        return items.slice().reverse();
     };
 });
 recomSubApp.filter('titlecase', function () {
@@ -823,7 +900,9 @@ recomApp.constant('CONSTANTS', (function () {
         GETDISCUSSIONS: 'get discussions',
         MAKEPAYMENT: 'make payment',
         GETPAYMENTCONFIGURATION: 'get payment configuration',
-        SETPAYMENTCONFIGURATION: 'set payment configuration'
+        SETPAYMENTCONFIGURATION: 'set payment configuration',
+        ADDMESSAGE: 'add message to discussion',
+        GETMESSAGE: 'get messages'
     };
 
     CONSTANTS.SERVICES = SERVICES;

@@ -1,17 +1,20 @@
-<div class="container" ng-controller="DiscussionController">
+<div class="container" ng-controller="DiscussionController" ng-init="getMessages()">
     <div class="menu">
-        <span class="back-text"><a style="text-decoration: none" href="#/discussions"><i class="back fa fa-angle-left"></i></a> {{dicussionName}}
+        <span class="back-text"><a style="text-decoration: none" href="#/discussions"><i class="back fa fa-angle-left"></i></a> {{discussion.name}}
             <!--<img src="https://i.imgur.com/G4EjwqQ.jpg" draggable="false"/>-->
         </span>
         <!--        <div class="name">Random chat</div>
                 <div class="members"><b>You</b>, Marga, Charo & Brotons</div>-->
     </div>
+    <div class="center"><span title="Get Older Messages" class="older-message fa-stack fa-lg" ng-click="getOlderMessage()"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-angle-up fa-stack-1x fa-inverse"></i></span></div>
     <ol class="chat">
-        <li class="other" ng-class="{self: msg.from === 'Aditya Tapaswi'}" ng-repeat="msg in messages">
+        <li class="other" ng-class="{
+                    self: msg.by_id === user.id
+                }" ng-repeat="msg in messages | reverse" scroll-if="msg.id == last_msg">
             <div class="msg">
-                <div class="user">{{msg.from}}</div>
-                <pre>{{msg.msg}}</pre>
-                <time>{{msg.on}}</time>
+                <div class="user">{{msg.by_name}}</div>
+                <pre>{{msg.message}}</pre>
+                <time>{{formatDate(msg.date)+' '+formatTime(msg.date)}}</time>
             </div>
         </li>
         <!--        <li class="self">
@@ -30,11 +33,11 @@
         <form class="col-sm-12">
             <div class="row">
                 <div class="col-sm-11 form-group">
-                    <textarea type="text" placeholder="Say something"></textarea>
+                    <textarea type="text" placeholder="Say something" ng-model="msg"></textarea>
                 </div>
 
                 <div class="col-sm-1 form-group">
-                    <button class="btn btn-default green-circle-button" title="Add Transaction" ng-click=""><i class="fa fa-lg fa-send"></i></button>
+                    <button class="btn btn-default green-circle-button" title="Send" ng-click="addMessage()"><i class="fa fa-lg fa-send"></i></button>
                 </div>
             </div>
         </form>

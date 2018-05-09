@@ -624,7 +624,10 @@ textarea {
     margin: 10px 0 0;
     min-height: 1em;
 }
-
+.older-message 
+{
+    color:#198c19;
+}
 .reauth-email {
     display: block;
     color: #404040;
