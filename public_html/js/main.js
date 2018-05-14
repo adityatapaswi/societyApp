@@ -1,4 +1,4 @@
-var recomApp = angular.module('app.recomsys', ['ngCookies', 'file-model', 'ngResource', 'ngRoute', "ngTable", 'ngFileSaver', 'ngMessages', 'app.recomsys.sub', 'ngSanitize', 'selectize', '720kb.datepicker', 'ui.bootstrap', 'chart.js', 'ngAlertify', 'angular-thumbnails']);
+var recomApp = angular.module('app.recomsys', ['ngCookies', 'file-model','cp.ngConfirm' ,'ngResource', 'ngRoute', "ngTable", 'ngFileSaver', 'ngMessages', 'app.recomsys.sub', 'ngSanitize', 'selectize', '720kb.datepicker', 'ui.bootstrap', 'chart.js', 'ngAlertify', 'angular-thumbnails']);
 recomApp.config(
         function ($compileProvider)
         {
@@ -53,6 +53,10 @@ recomApp.config(['$routeProvider', '$locationProvider',
                 })
                 .when('/signup', {
                     templateUrl: 'templates/signup.html',
+                    activetab: 'Home'
+                })
+                .when('/change-password', {
+                    templateUrl: 'templates/changePassword.html',
                     activetab: 'Home'
                 })
                 .when('/home/dashboard', {

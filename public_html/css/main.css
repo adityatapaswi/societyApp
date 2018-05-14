@@ -726,6 +726,11 @@ textarea {
         0 1px 3px rgba(0,0,0, 0.12),
         0 1px 2px rgba(0,0,0, 0.24);      
 }
+.shadowDepth2 {
+    box-shadow: 
+        6px 5px 3px rgba(0,0,0, 0.12),
+        6px 5px 2px rgba(0,0,0, 0.24);      
+}
 
 .card-timeline {
     background-color: #fff;
@@ -1510,7 +1515,7 @@ emoji.shit{background-image: url(https://i.imgur.com/H5Jba8r.png);}
         box-shadow: none;
         transition: all .4s cubic-bezier(0.2, -0.2, 0.2, 1.2);
     }
-   .typezone textarea:focus {
+    .typezone textarea:focus {
         height: 30vh;
         /*margin-top: 30vh;*/
         box-shadow: 0px -20px 20px rgba(0,0,0,0.1);
@@ -1925,4 +1930,33 @@ div.desc {
     h3 {
         page-break-after: avoid;
     }
+}
+.event-type {
+    padding: 23px;
+    padding-left: 87px;
+    border-bottom-left-radius: 50%;
+    border-top-left-radius: 50%;
+    position: absolute;
+    margin-right: 0;
+    right: -11px;
+}
+
+.news
+{
+    background: green;
+    color: white;
+}
+.notice{
+    background: white;
+    color: green;
+    border-top: 1px solid green;
+    border-left: 1px solid green;
+    /*border-bottom: 1px solid green;*/
+}
+.delete-btn{
+    position: absolute;
+    color: maroon;
+}
+.delete-btn:hover{
+    color: red;
 }

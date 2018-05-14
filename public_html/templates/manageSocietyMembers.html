@@ -15,7 +15,7 @@
                 <th scope="col">Email</th>
                 <th scope="col">Phone</th>
                 <th scope="col">Type</th>
-                <th scope="col" ng-show="user.type==='chairman'">Action</th>
+                <th scope="col">Action</th>
                 
                 
             </tr>
@@ -26,9 +26,9 @@
                 <td data-label="Email">{{member.email}}</td>
                 <td data-label="Phone">{{member.phone}}</td>
                 <td data-label="Type">{{member.type| titlecase}}</td>
-                <td data-label="Action"ng-show="user.type==='chairman'">
-                    <button class="btn btn-info">Reset Pass</button>
-                    <button class="btn btn-danger" title="Delete Member"><i class="fa fa-lg fa-trash-o"></i></button>
+                <td data-label="Action">
+                    <button class="btn btn-info" ng-show="user.type==='chairman'||member.id===user.id" ng-click="resetPass(member)">Reset Pass</button>
+                    <button class="btn btn-danger" title="Delete Member" ng-hide="user.type==='member'|| member.id===user.id"><i class="fa fa-lg fa-trash-o"></i></button>
 
                 </td>
             </tr>

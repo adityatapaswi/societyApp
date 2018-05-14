@@ -18,7 +18,8 @@
             <!--<h3 style="color:#0077b5; text-align:center;; border-bottom:1px solid #c0c0c0;"> Photo Gallery </h3>-->
 
             <div class="gallery" ng-repeat="img in images">
-                <a data-toggle="modal" data-target="#myModal" ng-click="selectImage(img)">
+                <span class="btn fa-stack fa-lg delete-btn" ng-click="deletePhoto(img)"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-trash-o fa-stack-1x fa-inverse"></i></span>
+                    <a data-toggle="modal" data-target="#myModal" ng-click="selectImage(img)">
                     <img id="myImg" class="img-thumb" src="{{imgUrl + img.image_url}}" alt="{{img.title}}" width="300" height="200">
 
                     <div class="desc">{{img.title}}</div>

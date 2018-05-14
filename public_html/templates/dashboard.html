@@ -11,19 +11,18 @@
     </div>
     <br>
     <div class="card-timeline radius shadowDepth1" ng-repeat="event in timeline">
-        <div class="card__image border-tlr-radius">
-            <img ng-show="event.type==='News'" src="img/news.jpg" alt="{{event.eventType}}" class="border-tlr-radius">
-            <img ng-show="event.type==='Notice'" src="img/notice.jpg" alt="{{event.eventType}}" class="border-tlr-radius">
-        </div>
 
         <div class="card__content card__padding">
-            
 
-            <div class="card__meta">
-                <a href="">{{event.eventType}}</a>
-                <time>{{event.date}}</time>
+            <div class="row">
+                <div class="card__meta col-md-6">
+                    <!--<a href="">{{event.eventType}}</a>-->
+                    <time>{{event.date}}</time>
+                </div>
+                <div class="col-md-6 right">
+                    <div class="event-type shadowDepth2"ng-class="{news: event.type === 'News', notice:event.type==='Notice'}">{{event.type}}</div>
+                </div>
             </div>
-
             <article class="card__article">
                 <h2><a href="#">{{event.title}}</a></h2>
 

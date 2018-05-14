@@ -1,22 +1,46 @@
 <div ng-controller="EventController" >
     <h2>Upcoming Events</h2>
-     <div class="right" ng-show="user.type==='chairman'">
+    <div class="right" ng-show="user.type === 'chairman'">
         <div>
             <button class="btn btn-default green-circle-button" title="Add Event"  ng-click="gotoAdd();"><i class="fa fa-lg fa-plus"></i></button>
 
         </div>   
     </div>
-    <div id="mainbox" ng-show="events.length==0">
+    <div id="mainbox" ng-show="events.length == 0">
         <strong>No Upcoming Events</strong>
     </div>
     <div id="mainbox" ng-show="events.length">
 
-        <div class="card-birthday" ng-repeat="event in events"  ng-class="{today: event.days_remaining==0}" >
-           
+        <div class="card-birthday" ng-repeat="event in events" data-toggle="modal" data-target="#myModal" ng-click="selectEvent(event)"  ng-class="{today: event.days_remaining == 0}" >
+
             <h2>{{event.title}}</h2>
-            <p class="right" ng-hide="event.days_remaining==0">{{event.days_remaining==1?'Tommorow':event.days_remaining<6? (event.days_remaining+' day(s) remaining'):event.date}} </p>
-            <p class="right" ng-show="event.days_remaining==0">Today</p>
+            <p class="right" >{{formatDate(event.date_date)}} </p>
+            
         </div>
     </div>
-    <hr>
+    <hr><div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" ng-controller="PhotoGalleryController">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body center">
+                    <!--<img class="modal-image" ng-src="{{imgUrl + photo.image_url}}">-->
+                    <article class="card__article">
+                        <div class="row">
+                            <div class="col-lg-6 left"></div>
+                            <div class="col-lg-6 right time">
+                                On:{{formatDate(event.date_date)}}
+                            </div>
+                        </div>     
+                        <h2><a href="">{{event.title}}</a></h2>
+
+                        <p>{{event.description}}</p>
+
+                    </article>
+                    <!--                                <div id="caption"></div>
+                                                    <div id="caption"></div>-->
+
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
