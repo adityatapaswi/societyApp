@@ -404,6 +404,33 @@ recomSubApp.controller('BalanceSheetController', function ($scope, userService, 
         $location.path('/addTransaction');
     };
 });
+recomSubApp.controller('ContactUsController', function ($scope, alertify, userService, $location, $window, $cookieStore, $http, CONSTANTS) {
+    $scope.sendMsg = function () {
+        $scope.msg.view = CONSTANTS.VIEW.CONTACTUS;
+        $.post(CONSTANTS.SERVICES.APIURL, $scope.msg)
+                .success(function (data) {
+                    if (data === 'Insertion Success')
+                    {
+                        alertify.logPosition("top center");
+                        alertify.success("We have registered your feedback. Thank You!");
+                    }
+                    $location.path("/home");
+                    if (!$scope.$$phase)
+                        $scope.$apply();
+                })
+                .error(function (xhr, status, error) {
+                    // error handling
+                    if (error !== undefined) {
+                        alertify.logPosition("top center");
+                        alertify.error("Something Went Wrong");
+
+
+                    }
+
+                });
+    };
+});
+
 recomSubApp.controller('PaymentsController', function ($scope, $location, userService, $window, objTransferService, CONSTANTS) {
     $scope.user = userService.getUser();
     $scope.payment = objTransferService.getObj() || {};
@@ -953,6 +980,7 @@ recomApp.constant('CONSTANTS', (function () {
         GETMESSAGE: 'get messages',
         DELETEIMAGE: 'delete image',
         CHANGEPASS: 'change password',
+        CONTACTUS: 'contact us'
     };
     CONSTANTS.SERVICES = SERVICES;
     CONSTANTS.VIEW = VIEWS;
