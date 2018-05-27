@@ -27,7 +27,7 @@ recomApp.run(function ($rootScope, $route, $location, $cookieStore, $templateCac
             });
         }
 
-        var restrictedPage = $.inArray($location.path(), ['/home', '/login', '/signup', '/contactUs']) === -1;
+        var restrictedPage = $.inArray($location.path(), ['/home', '/login', '/signup', '/contactUs','/resetPass','/forgotPass']) === -1;
 
         if (restrictedPage && (!$cookieStore.get("societyApp")))
         {
@@ -105,6 +105,14 @@ recomApp.config(['$routeProvider', '$locationProvider',
                 })
                 .when('/makePayments', {
                     templateUrl: 'templates/makePayments.html',
+                    activetab: 'Home'
+                })
+                .when('/resetPass', {
+                    templateUrl: 'templates/resetPass.html',
+                    activetab: 'Home'
+                })
+                .when('/forgotPass', {
+                    templateUrl: 'templates/forgotPass.html',
                     activetab: 'Home'
                 })
                 .when('/setPaymentsConfiguraation', {

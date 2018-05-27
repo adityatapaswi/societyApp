@@ -2,7 +2,7 @@
 
 <div class="container" ng-controller="PaymentsController" ng-init="getConfig()">
     <div class="right">
-        <div class="col-md-12">
+        <div class="col-md-12" ng-show="user.type==='chairman'">
             <button class="btn btn-default green-circle-button" title="Set Payment Configuration"  ng-click="gotoSetPayConfig();"><i class="fa fa-lg fa-cog"></i></button>
 
         </div>

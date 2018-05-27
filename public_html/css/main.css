@@ -758,11 +758,13 @@ textarea {
 
 /* card meta */
 .card__meta time {
-    font-size: 1.5rem;
+    font-size: 1rem;
     color: #bbb;
     margin-left: 0.8rem;
 }
-
+.blue{
+    color: #719dc4;
+}
 /* card article */
 .card__article a {
     text-decoration: none;

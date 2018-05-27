@@ -161,8 +161,19 @@ recomSubApp.controller('SignupController', function ($scope, alertify, utilServi
 });
 recomSubApp.controller('UserController', function ($scope, objTransferService, alertify, $ngConfirm, $location, utilService, $window, $cookieStore, $http, CONSTANTS) {
     $scope.user = objTransferService.getObj();
-    if (!$scope.user.password)
-        $location.path('/manageSocietyMembers');
+    $scope.checkForUser = function () {
+        if (!$scope.user.password)
+            $location.path('/manageSocietyMembers');
+
+    };
+    $scope.getSearchParams = function () {
+        $scope.reset = {};
+        if ($location.$$search.id)
+        {
+            $scope.reset.id = $location.$$search.id;
+//            $scope.reset.type = $location.$$search.type;
+        }
+    };
     $scope.changePass = function () {
         if ($scope.user.password === $scope.oldPass) {
             if ($scope.newPass === $scope.cPass) {
@@ -193,6 +204,54 @@ recomSubApp.controller('UserController', function ($scope, objTransferService, a
             alertify.logPosition("top center");
             alertify.error("Old Password Didn't Matched");
         }
+    };
+    $scope.resetPass = function () {
+        if ($scope.reset.pass === $scope.reset.cPass) {
+            $.post(CONSTANTS.SERVICES.APIURL, {view: CONSTANTS.VIEW.CHANGEPASS, id: $scope.reset.id, password: $scope.reset.pass})
+                    .success(function (data) {
+                        if (data.includes('Successfully')) {
+                            alertify.logPosition("top center");
+                            alertify.success(data);
+                            $location.path('/home');
+                        }
+                        if (!$scope.$$phase)
+                            $scope.$apply();
+                    })
+                    .error(function (xhr, status, error) {
+                        // error handling
+                        if (error !== undefined) {
+                            alertify.logPosition("top center");
+                            alertify.error("Somthing Went Wrong");
+                        }
+
+                    });
+        }
+        else {
+            alertify.logPosition("top center");
+            alertify.error("Password And Confirm Password Didn't Matched");
+        }
+
+    };
+    $scope.getUserId = function () {
+        $.post(CONSTANTS.SERVICES.APIURL, {view: CONSTANTS.VIEW.GETUSERID, email: $scope.email})
+                .success(function (data) {
+                    if (data.id) {
+
+                        $location.path('/forgotPass').search({id: data.id});
+                    }
+                    if (!$scope.$$phase)
+                        $scope.$apply();
+                })
+                .error(function (xhr, status, error) {
+                    // error handling
+                    if (error !== undefined) {
+                        alertify.logPosition("top center");
+                        alertify.error("Somthing Went Wrong");
+                    }
+
+                });
+
+
     };
 });
 recomSubApp.controller('PhotoGalleryController', function ($scope, userService, alertify, $ngConfirm, $location, utilService, $window, $cookieStore, $http, CONSTANTS) {
@@ -951,10 +1010,12 @@ recomApp.constant('CONSTANTS', (function () {
     var CONSTANTS = {};
     var SERVICES = {
 //         APIURL: 'http://ec2-54-169-136-45.ap-southeast-1.compute.amazonaws.com/api/fm/v0/users'
-//        APIURL: 'http://career.navigator.thesolutioncircle.in/ServiceController.php'
-        APIURL: 'http://localhost/society_api/ServiceController.php',
-        FILEPATH: 'http://localhost/society_api',
-        UPLOADURL: 'http://localhost/society_api/fileUpload.php'
+        APIURL: 'http://society-app.thesolutioncircle.in/api/ServiceController.php',
+//        APIURL: 'http://localhost/society_api/ServiceController.php',
+        FILEPATH: 'http://society-app.thesolutioncircle.in/api',
+//        FILEPATH: 'http://localhost/society_api',
+        UPLOADURL: 'http://society-app.thesolutioncircle.in/api/fileUpload.php'
+//        UPLOADURL: 'http://localhost/society_api/fileUpload.php'
 //        BASE_PATH: 'http://192.168.1.115:8080/api/fm/v0/'
                 // 'http://localhost:8080/api/fm/v0/' //'http://ec2-52-74-20-101.ap-southeast-1.compute.amazonaws.com/api/fm/v0/' 
     };
@@ -980,6 +1041,7 @@ recomApp.constant('CONSTANTS', (function () {
         GETMESSAGE: 'get messages',
         DELETEIMAGE: 'delete image',
         CHANGEPASS: 'change password',
+        GETUSERID: 'get user id',
         CONTACTUS: 'contact us'
     };
     CONSTANTS.SERVICES = SERVICES;

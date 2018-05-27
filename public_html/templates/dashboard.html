@@ -15,16 +15,13 @@
         <div class="card__content card__padding">
 
             <div class="row">
-                <div class="card__meta col-md-6">
-                    <!--<a href="">{{event.eventType}}</a>-->
-                    <time>{{event.date}}</time>
-                </div>
+                <h3 class="col-md-6 blue"><span>{{event.title}}</span></h3>
                 <div class="col-md-6 right">
-                    <div class="event-type shadowDepth2"ng-class="{news: event.type === 'News', notice:event.type==='Notice'}">{{event.type}}</div>
+                    <div class="event-type shadowDepth2"ng-class="{news: event.type === 'News', notice:event.type === 'Notice'}">{{event.type}}</div>
                 </div>
             </div>
             <article class="card__article">
-                <h2><a href="#">{{event.title}}</a></h2>
+
 
                 <p>{{event.description}}</p>
             </article>
@@ -32,10 +29,14 @@
 
         <div class="card__action">
 
-            <div class="card__author">
-                <img src="https://smilestream.com/Content/userimages/default-avatar.png" height="50" width="50" alt="user">
-                <div class="card__author-content">
-                    By <a href="#">{{event.posted_by}}</a>
+            <div class="card__author row">
+
+                <div class="card__author-content col-md-6">
+                    By <span class="blue">{{event.posted_by}}</span>
+                </div>
+                <div class="card__meta right col-md-6">
+                    <!--<a href="">{{event.eventType}}</a>-->
+                    <time>{{event.date}}</time>
                 </div>
             </div>
         </div>
