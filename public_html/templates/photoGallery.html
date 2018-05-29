@@ -19,7 +19,7 @@
 
             <div class="gallery" ng-repeat="img in images">
                 <span class="btn fa-stack fa-lg delete-btn" ng-click="deletePhoto(img)"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-trash-o fa-stack-1x fa-inverse"></i></span>
-                    <a data-toggle="modal" data-target="#myModal" ng-click="selectImage(img)">
+                <a data-toggle="modal" data-target="#myModal" ng-click="selectImage(img)">
                     <img id="myImg" class="img-thumb" src="{{imgUrl + img.image_url}}" alt="{{img.title}}" width="300" height="200">
 
                     <div class="desc">{{img.title}}</div>
@@ -30,14 +30,14 @@
                             <div class="modal-body center">
                                 <img class="modal-image" ng-src="{{imgUrl + photo.image_url}}">
                                 <article class="card__article">
-                                <div class="row">
-                                    <div class="col-lg-6 left time">
-                                        By:{{photo.uploader}}
-                                    </div>
-                                    <div class="col-lg-6 right time">
-                                        On:{{photo.uploaded_on}}
-                                    </div>
-                                </div>     
+                                    <div class="row">
+                                        <div class="col-lg-6 left time">
+                                            By:{{photo.uploader}}
+                                        </div>
+                                        <div class="col-lg-6 right time">
+                                            On:{{photo.uploaded_on}}
+                                        </div>
+                                    </div>     
                                     <h2><a href="">{{photo.title}}</a></h2>
 
                                     <p>{{photo.description}}</p>
@@ -55,9 +55,7 @@
 
         </div>
     </div>
-
-
-
+    <div class="loading-spiner-holder2" ng-show="loading || false"></div>
 </div> <!-- /container -->
 
 <script>

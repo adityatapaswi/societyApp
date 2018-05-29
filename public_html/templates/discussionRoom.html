@@ -19,14 +19,17 @@
         </li>
     </ol>
     <div class="typezone">
-        <form class="col-sm-12">
+        <form class="col-sm-12" ng-submit="addMessage()">
             <div class="row">
-                <div class="col-sm-11 form-group">
-                    <textarea type="text" placeholder="Say something" ng-model="msg"></textarea>
+                <div class="col-sm-1 form-group">
+                    <button class="btn btn-default red-circle-button" title="Logout Discussion" ng-click="gotoDisscussions()"><i class="fa fa-power-off"></i></button>
+                </div>
+                <div class="col-sm-10 form-group">
+                    <textarea type="text" placeholder="Say something" ng-model="msg" required=""></textarea>
                 </div>
 
                 <div class="col-sm-1 form-group">
-                    <button class="btn btn-default green-circle-button" title="Send" ng-click="addMessage()"><i class="fa fa-lg fa-send"></i></button>
+                    <button class="btn btn-default green-circle-button" type="submit" title="Send"><i class="fa fa-lg fa-send"></i></button>
                 </div>
             </div>
         </form>

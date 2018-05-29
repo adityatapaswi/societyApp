@@ -559,6 +559,16 @@ textarea {
     width: 100%;
     background: rgba( 255, 255, 255,0.9) url('../img/load.gif') 50% 50% no-repeat;
 }
+.loading-spiner-holder2 {
+    /*display: none;*/
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba( 255, 255, 255,0.9) url('../img/load.gif') 50% 50% no-repeat;
+}
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
     display: none;
     position: fixed;
@@ -1061,6 +1071,37 @@ table th {
 
 }
 .green-circle-link-greater-than {
+    font-size: 1em;
+}
+.red-circle-button {
+    box-shadow: 2px 4px 0 2px rgba(0,0,0,0.1);
+    border: .5em solid maroon;
+    font-size: 1em;
+    line-height: 1.1em;
+    color: #ffffff;
+    background-color: maroon;
+    margin: auto;
+    border-radius: 50%;
+    height: 4em;
+    width: 4em;
+    position: relative;
+}
+.red-circle-button:hover {
+    color:#ffffff;
+    background-color: maroon;
+    text-decoration: none;
+    border-color: #590000;
+
+}
+.red-circle-button:visited, .red-circle-button:focus {
+    color:#ffffff;
+    background-color: maroon;
+    border-color: #590000;
+    text-decoration: none;
+    outline:none;
+
+}
+.red-circle-link-greater-than {
     font-size: 1em;
 }
 

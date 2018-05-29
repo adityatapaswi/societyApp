@@ -13,14 +13,14 @@
                     <textarea  placeholder="Enter Description Here.." rows="3" class="form-control" ng-model="event.desc" required=""></textarea>
                 </div>	
                 <div class="row">
-                <div class="col-lg-6 form-group">
-                    <strong>Date</strong>
-                    <input min="{{minDate}}" max="2022-11-24"  ng-model="dt" placeholder="Select Date" type="date" class="form-control"/>
-                </div>	
-                <div class="col-lg-6 form-group">
-                    <strong>Time</strong>
-                    <input  placeholder="Select Time" type="time" class="form-control" ng-model="time" required=""/>
-                </div>	
+                    <div class="col-lg-6 form-group">
+                        <strong>Date</strong>
+                        <input min="{{minDate}}" max="2022-11-24"  ng-model="dt" placeholder="Select Date" type="date" class="form-control"/>
+                    </div>	
+                    <div class="col-lg-6 form-group">
+                        <strong>Time</strong>
+                        <input  placeholder="Select Time" type="time" class="form-control" ng-model="time" required=""/>
+                    </div>	
                 </div>
                 <br>
                 <div class="center-div">
@@ -31,4 +31,5 @@
             </div>
         </form>  
     </div>
+    <div class="loading-spiner-holder2" ng-show="loading || false"></div>
 </div>

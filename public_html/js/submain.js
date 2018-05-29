@@ -12,6 +12,7 @@ recomSubApp.controller('PostWallController', function ($scope, userService, aler
     $scope.types = ["News", "Notice"];
     $scope.user = userService.getUser();
     $scope.addPost = function () {
+        $scope.loading = true;
         $scope.post.date = utilService.formatDate(new Date());
         $scope.post.view = CONSTANTS.VIEW.CREATEPOST;
         $scope.post.date_date = utilService.formatDate_Date(new Date());
@@ -19,6 +20,7 @@ recomSubApp.controller('PostWallController', function ($scope, userService, aler
         $scope.post.by = $scope.user.id;
         $.post(CONSTANTS.SERVICES.APIURL, $scope.post)
                 .success(function (data) {
+
                     if (!data.reply)
                     {
                         alertify.logPosition("top center");
@@ -28,13 +30,17 @@ recomSubApp.controller('PostWallController', function ($scope, userService, aler
                         alertify.logPosition("top center");
                         alertify.success(data.reply);
                         $location.path('/home/dashboard');
-                        if (!$scope.$$phase)
-                            $scope.$apply();
-                    }
 
+                    }
+                    $scope.loading = false;
+                    if (!$scope.$$phase)
+                        $scope.$apply();
 
                 })
                 .error(function (xhr, status, error) {
+                    $scope.loading = false;
+                    if (!$scope.$$phase)
+                        $scope.$apply();
                     // error handling
                     if (error !== undefined) {
                         alertify.logPosition("top center");
@@ -58,8 +64,10 @@ recomSubApp.controller('RedirectController', function ($scope, alertify, $locati
         $scope.trans.by = $scope.user.id;
         $scope.trans.view = CONSTANTS.VIEW.ADDTRANSACTION;
         $scope.trans.type = "CR";
+        $scope.loading = true;
         $.post(CONSTANTS.SERVICES.APIURL, $scope.trans)
                 .success(function (data) {
+
                     if (data.reply.includes('Successfully'))
                     {
                         alertify.logPosition("top center");
@@ -71,20 +79,26 @@ recomSubApp.controller('RedirectController', function ($scope, alertify, $locati
                         alertify.logPosition("top center");
                         alertify.error(data.reply);
                     }
+                    $scope.loading = false;
                     if (!$scope.$$phase)
                         $scope.$apply();
-                }).error(function (xhr, status, error) {
-            // error handling
-            if (error !== undefined) {
-                alertify.logPosition("top center");
-                alertify.error("Something went wrong");
-            }
-        });
+                })
+                .error(function (xhr, status, error) {
+                    $scope.loading = false;
+                    if (!$scope.$$phase)
+                        $scope.$apply();
+                    // error handling
+                    if (error !== undefined) {
+                        alertify.logPosition("top center");
+                        alertify.error("Something went wrong");
+                    }
+                });
     }
 });
 recomSubApp.controller('AddSocietyMemberController', function ($scope, userService, alertify, utilService, $location, $window, $cookieStore, $http, CONSTANTS) {
     $scope.u = userService.getUser();
     $scope.addMember = function () {
+        $scope.loading = true;
         $scope.user.view = CONSTANTS.VIEW.SIGNUP;
         $scope.user.dob = utilService.formatDate($scope.dob);
         $scope.user.dob_date = utilService.formatDate_Date($scope.dob);
@@ -96,6 +110,7 @@ recomSubApp.controller('AddSocietyMemberController', function ($scope, userServi
         $scope.user.sid = $scope.u.sid;
         $.post(CONSTANTS.SERVICES.APIURL, $scope.user)
                 .success(function (data) {
+                    $scope.loading = false;
                     if (!data.reply)
                     {
                         alertify.logPosition("top center");
@@ -112,6 +127,9 @@ recomSubApp.controller('AddSocietyMemberController', function ($scope, userServi
 
                 })
                 .error(function (xhr, status, error) {
+                    $scope.loading = false;
+                    if (!$scope.$$phase)
+                        $scope.$apply();
                     // error handling
                     if (error !== undefined) {
                         alertify.logPosition("top center");
@@ -132,8 +150,10 @@ recomSubApp.controller('SignupController', function ($scope, alertify, utilServi
             $scope.user.doa_date = utilService.formatDate_Date($scope.doa);
         }
         $scope.user.type = 'society';
+        $scope.loading = true;
         $.post(CONSTANTS.SERVICES.APIURL, $scope.user)
                 .success(function (data) {
+
                     if (!data.reply)
                     {
                         alertify.logPosition("top center");
@@ -143,13 +163,17 @@ recomSubApp.controller('SignupController', function ($scope, alertify, utilServi
                         alertify.logPosition("top center");
                         alertify.success(data.reply);
                         $location.path('/');
-                        if (!$scope.$$phase)
-                            $scope.$apply();
-                    }
 
+                    }
+                    $scope.loading = false;
+                    if (!$scope.$$phase)
+                        $scope.$apply();
 
                 })
                 .error(function (xhr, status, error) {
+                    $scope.loading = false;
+                    if (!$scope.$$phase)
+                        $scope.$apply();
                     // error handling
                     if (error !== undefined) {
                         alertify.logPosition("top center");
@@ -177,6 +201,7 @@ recomSubApp.controller('UserController', function ($scope, objTransferService, a
     $scope.changePass = function () {
         if ($scope.user.password === $scope.oldPass) {
             if ($scope.newPass === $scope.cPass) {
+                $scope.loading = true;
                 $.post(CONSTANTS.SERVICES.APIURL, {view: CONSTANTS.VIEW.CHANGEPASS, id: $scope.user.id, password: $scope.newPass})
                         .success(function (data) {
                             if (data.includes('Successfully')) {
@@ -184,14 +209,18 @@ recomSubApp.controller('UserController', function ($scope, objTransferService, a
                                 alertify.success(data);
                                 $location.path('/manageSocietyMembers');
                             }
+                            $scope.loading = false;
                             if (!$scope.$$phase)
                                 $scope.$apply();
                         })
                         .error(function (xhr, status, error) {
-                            // error handling
+                            $scope.loading = false;
+                            if (!$scope.$$phase)
+                                $scope.$apply();
+
                             if (error !== undefined) {
                                 alertify.logPosition("top center");
-                                alertify.error("Somthing Went Wrong");
+                                alertify.error("Password Change Failed");
                             }
 
                         });
@@ -207,6 +236,7 @@ recomSubApp.controller('UserController', function ($scope, objTransferService, a
     };
     $scope.resetPass = function () {
         if ($scope.reset.pass === $scope.reset.cPass) {
+            $scope.loading = true;
             $.post(CONSTANTS.SERVICES.APIURL, {view: CONSTANTS.VIEW.CHANGEPASS, id: $scope.reset.id, password: $scope.reset.pass})
                     .success(function (data) {
                         if (data.includes('Successfully')) {
@@ -214,10 +244,14 @@ recomSubApp.controller('UserController', function ($scope, objTransferService, a
                             alertify.success(data);
                             $location.path('/home');
                         }
+                        $scope.loading = false;
                         if (!$scope.$$phase)
                             $scope.$apply();
                     })
                     .error(function (xhr, status, error) {
+                        $scope.loading = false;
+                        if (!$scope.$$phase)
+                            $scope.$apply();
                         // error handling
                         if (error !== undefined) {
                             alertify.logPosition("top center");
@@ -233,12 +267,13 @@ recomSubApp.controller('UserController', function ($scope, objTransferService, a
 
     };
     $scope.getUserId = function () {
+        $scope.loading = true;
         $.post(CONSTANTS.SERVICES.APIURL, {view: CONSTANTS.VIEW.GETUSERID, email: $scope.email})
                 .success(function (data) {
                     if (data.id) {
-
                         $location.path('/forgotPass').search({id: data.id});
                     }
+                    $scope.loading = false;
                     if (!$scope.$$phase)
                         $scope.$apply();
                 })
@@ -248,7 +283,9 @@ recomSubApp.controller('UserController', function ($scope, objTransferService, a
                         alertify.logPosition("top center");
                         alertify.error("Somthing Went Wrong");
                     }
-
+                    $scope.loading = false;
+                    if (!$scope.$$phase)
+                        $scope.$apply();
                 });
 
 
@@ -273,9 +310,11 @@ recomSubApp.controller('PhotoGalleryController', function ($scope, userService, 
                     text: 'Yes',
                     btnClass: 'btn-danger',
                     action: function (scope, button) {
+                        $scope.loading = true;
                         $img.view = CONSTANTS.VIEW.DELETEIMAGE;
                         $.post(CONSTANTS.SERVICES.APIURL, $img)
                                 .success(function (data) {
+                                    $scope.loading = true;
                                     if (data.includes('Successfully')) {
                                         alertify.logPosition("top center");
                                         alertify.success(data);
@@ -285,6 +324,8 @@ recomSubApp.controller('PhotoGalleryController', function ($scope, userService, 
                                         $scope.$apply();
                                 })
                                 .error(function (xhr, status, error) {
+                                    if (!$scope.$$phase)
+                                        $scope.$apply();
                                     // error handling
                                     if (error !== undefined) {
                                         alertify.logPosition("top center");
@@ -305,22 +346,28 @@ recomSubApp.controller('PhotoGalleryController', function ($scope, userService, 
         });
     };
     $scope.getPhotos = function () {
+        $scope.loading = true;
         $.post(CONSTANTS.SERVICES.APIURL, {view: CONSTANTS.VIEW.PHOTOS, id: $scope.user.sid})
                 .success(function (data) {
                     $scope.images = data;
+                    $scope.loading = false;
                     if (!$scope.$$phase)
                         $scope.$apply();
                 })
                 .error(function (xhr, status, error) {
+                    $scope.loading = false;
+                    if (!$scope.$$phase)
+                        $scope.$apply();
                     // error handling
                     if (error !== undefined) {
                         alertify.logPosition("top center");
-                        alertify.error("Credentials Not Valid");
+                        alertify.error("Nothing To Show");
                     }
 
                 });
     };
     $scope.addPhoto = function () {
+        $scope.loading = true;
         $scope.photo.date = utilService.formatDate(new Date());
 //      $scope.photo.upfile=$scope.upfile;
         $scope.photo.date_date = utilService.formatDate_Date(new Date());
@@ -336,6 +383,7 @@ recomSubApp.controller('PhotoGalleryController', function ($scope, userService, 
             processData: false,
             contentType: false,
             type: 'POST'}).success(function (data) {
+            $scope.loading = false;
             if (data.reply)
             {
                 alertify.logPosition("top center");
@@ -351,6 +399,9 @@ recomSubApp.controller('PhotoGalleryController', function ($scope, userService, 
                 $scope.$apply();
         })
                 .error(function (xhr, status, error) {
+                    $scope.loading = false;
+                    if (!$scope.$$phase)
+                        $scope.$apply();
                     // error handling
                     if (error !== undefined) {
                         alertify.logPosition("top center");
@@ -378,18 +429,24 @@ recomSubApp.controller('ManageSocietyMembersController', function ($scope, userS
     }
     $scope.getMembers = function ()
     {
+        $scope.loading = true;
         $.post(CONSTANTS.SERVICES.APIURL, {id: $scope.user.sid, view: CONSTANTS.VIEW.GETMEMBERS})
                 .success(function (data) {
                     $scope.members = data;
+                    $scope.loading = false;
                     if (!$scope.$$phase)
                         $scope.$apply();
-                }).error(function (xhr, status, error) {
-            // error handling
-            if (error !== undefined) {
-                alertify.logPosition("top center");
-                alertify.error("Something went wrong");
-            }
-        });
+                })
+                .error(function (xhr, status, error) {
+                    // error handling
+                    if (error !== undefined) {
+                        $scope.loading = false;
+                        if (!$scope.$$phase)
+                            $scope.$apply();
+                        alertify.logPosition("top center");
+                        alertify.error("Something went wrong");
+                    }
+                });
     };
     $scope.gotoAdd = function ()
     {
@@ -401,20 +458,26 @@ recomSubApp.controller('BalanceSheetController', function ($scope, userService, 
     $scope.transactions = [];
     $scope.summary = [];
     $scope.getSummary = function () {
+        $scope.loading = true;
         $.post(CONSTANTS.SERVICES.APIURL, {id: $scope.user.sid, view: CONSTANTS.VIEW.GETSUMMARY})
                 .success(function (data) {
+                    $scope.loading = false;
                     $scope.summary = data;
                     if (!$scope.$$phase)
                         $scope.$apply();
                 }).error(function (xhr, status, error) {
             // error handling
             if (error !== undefined) {
+                $scope.loading = false;
+                if (!$scope.$$phase)
+                    $scope.$apply();
                 alertify.logPosition("top center");
                 alertify.error("Something went wrong");
             }
         });
     };
     $scope.addTransaction = function () {
+        $scope.loading = true;
         $scope.trans.date = utilService.formatDate($scope.date);
         $scope.trans.date_date = utilService.formatDate_Date($scope.date);
         $scope.trans.sid = $scope.user.sid;
@@ -433,25 +496,34 @@ recomSubApp.controller('BalanceSheetController', function ($scope, userService, 
                         alertify.logPosition("top center");
                         alertify.error(data.reply);
                     }
+                    $scope.loading = false;
                     if (!$scope.$$phase)
                         $scope.$apply();
                 }).error(function (xhr, status, error) {
             // error handling
             if (error !== undefined) {
+                $scope.loading = false;
+                if (!$scope.$$phase)
+                    $scope.$apply();
                 alertify.logPosition("top center");
                 alertify.error("Something went wrong");
             }
         });
     };
     $scope.getTransactions = function () {
+        $scope.loading = true;
         $.post(CONSTANTS.SERVICES.APIURL, {id: $scope.user.sid, view: CONSTANTS.VIEW.GETTRANSACTIONS})
                 .success(function (data) {
                     $scope.transactions = data;
+                    $scope.loading = false;
                     if (!$scope.$$phase)
                         $scope.$apply();
                 }).error(function (xhr, status, error) {
             // error handling
             if (error !== undefined) {
+                $scope.loading = false;
+                if (!$scope.$$phase)
+                    $scope.$apply();
                 alertify.logPosition("top center");
                 alertify.error("Something went wrong");
             }
@@ -465,6 +537,7 @@ recomSubApp.controller('BalanceSheetController', function ($scope, userService, 
 });
 recomSubApp.controller('ContactUsController', function ($scope, alertify, userService, $location, $window, $cookieStore, $http, CONSTANTS) {
     $scope.sendMsg = function () {
+        $scope.loading = true;
         $scope.msg.view = CONSTANTS.VIEW.CONTACTUS;
         $.post(CONSTANTS.SERVICES.APIURL, $scope.msg)
                 .success(function (data) {
@@ -474,16 +547,18 @@ recomSubApp.controller('ContactUsController', function ($scope, alertify, userSe
                         alertify.success("We have registered your feedback. Thank You!");
                     }
                     $location.path("/home");
+                    $scope.loading = false;
                     if (!$scope.$$phase)
                         $scope.$apply();
                 })
                 .error(function (xhr, status, error) {
+                    $scope.loading = false;
+                    if (!$scope.$$phase)
+                        $scope.$apply();
                     // error handling
                     if (error !== undefined) {
                         alertify.logPosition("top center");
-                        alertify.error("Something Went Wrong");
-
-
+                        alertify.error("Please Try Again. We Need Your Valuable Feedback");
                     }
 
                 });
@@ -507,16 +582,21 @@ recomSubApp.controller('PaymentsController', function ($scope, $location, userSe
             $scope.payment.amount = $scope.payment.monthly_maintainance;
             $scope.payment.purpose = "Monthly Maintenance";
         }
+        $scope.loading = true;
         $.post(CONSTANTS.SERVICES.APIURL, $scope.payment)
                 .success(function (data) {
                     $scope.reponse = JSON.parse(data);
                     objTransferService.setObjUsingCookie($scope.payment);
                     $window.location.href = $scope.reponse.payment_request.longurl;
+                    $scope.loading = false;
                     if (!$scope.$$phase)
                         $scope.$apply();
                 })
                 .error(function (xhr, status, error) {
                     // error handling
+                    $scope.loading = false;
+                    if (!$scope.$$phase)
+                        $scope.$apply();
                     if (error !== undefined) {
                         alertify.logPosition("top center");
                         alertify.error("Something Went Wrong");
@@ -527,9 +607,11 @@ recomSubApp.controller('PaymentsController', function ($scope, $location, userSe
     $scope.getConfig = function () {
         $scope.payment.id = $scope.user.sid;
         $scope.payment.view = CONSTANTS.VIEW.GETPAYMENTCONFIGURATION;
+        $scope.loading = true;
         $.post(CONSTANTS.SERVICES.APIURL, $scope.payment)
                 .success(function (data) {
                     $scope.payment = data;
+                    $scope.loading = false;
                     if (!$scope.$$phase)
                         $scope.$apply();
                 })
@@ -546,7 +628,7 @@ recomSubApp.controller('PaymentsController', function ($scope, $location, userSe
                             alertify.error("Please Inform Your Chairman To Enable Online Payment");
                             $location.path('/home/dashboard');
                         }
-
+                        $scope.loading = false;
                         if (!$scope.$$phase)
                             $scope.$apply();
                     }
@@ -556,22 +638,27 @@ recomSubApp.controller('PaymentsController', function ($scope, $location, userSe
     $scope.configure = function () {
         $scope.payment.sid = $scope.user.sid;
         $scope.payment.view = CONSTANTS.VIEW.SETPAYMENTCONFIGURATION;
+        $scope.loading = true;
         $.post(CONSTANTS.SERVICES.APIURL, $scope.payment)
                 .success(function (data) {
                     if (data.includes('Successfully'))
                         $location.path('/makePayments');
+                    $scope.loading = false;
                     if (!$scope.$$phase)
                         $scope.$apply();
                 })
                 .error(function (xhr, status, error) {
+
                     // error handling
                     if (error !== undefined) {
                         alertify.logPosition("top center");
                         alertify.error("Payment Not Configured");
                         $scope.gotoSetPayConfig();
-                        if (!$scope.$$phase)
-                            $scope.$apply();
+
                     }
+                    $scope.loading = false;
+                    if (!$scope.$$phase)
+                        $scope.$apply();
 
                 });
     };
@@ -599,6 +686,9 @@ recomSubApp.controller('DiscussionController', function ($scope, $location, objT
         else
             return utilService.formatChatDate(new Date(dateStr));
     };
+    $scope.gotoDisscussions= function () {
+      $location.path('/discussions')  
+    };
     $scope.getOlderMessage = function () {
         $scope.getMessages();
     };
@@ -607,7 +697,7 @@ recomSubApp.controller('DiscussionController', function ($scope, $location, objT
             $scope.discussion = objTransferService.getObj();
         }
         if ($scope.discussion.id) {
-            $.post(CONSTANTS.SERVICES.APIURL, {id: $scope.discussion.id, limit: $scope.messages.length+5, offset: 0, view: CONSTANTS.VIEW.GETMESSAGE})
+            $.post(CONSTANTS.SERVICES.APIURL, {id: $scope.discussion.id, limit: $scope.messages.length + 5, offset: 0, view: CONSTANTS.VIEW.GETMESSAGE})
                     .success(function (data) {
                         $scope.messages = data;
                         if ($scope.last_msg !== $scope.messages[0].id) {
@@ -687,13 +777,18 @@ recomSubApp.controller('DiscussionController', function ($scope, $location, objT
                 });
     };
     $scope.getDisscussion = function () {
+        $scope.loading = true;
         $.post(CONSTANTS.SERVICES.APIURL, {id: $scope.user.sid, view: CONSTANTS.VIEW.GETDISCUSSIONS})
                 .success(function (data) {
                     $scope.discussions = data;
+                    $scope.loading = false;
                     if (!$scope.$$phase)
                         $scope.$apply();
                 })
                 .error(function (xhr, status, error) {
+                    $scope.loading = false;
+                    if (!$scope.$$phase)
+                        $scope.$apply();
                     // error handling
                     if (error !== undefined) {
                         alertify.logPosition("top center");
@@ -710,6 +805,7 @@ recomSubApp.controller('DiscussionController', function ($scope, $location, objT
         $scope.discussion.by = $scope.user.id;
         $scope.discussion.sid = $scope.user.sid;
         $scope.discussion.view = CONSTANTS.VIEW.ADDDISCUSSION;
+        $scope.loading = true;
         $.post(CONSTANTS.SERVICES.APIURL, $scope.discussion)
                 .success(function (data) {
                     if (data.reply) {
@@ -725,10 +821,14 @@ recomSubApp.controller('DiscussionController', function ($scope, $location, objT
                             alertify.error(data.reply);
                         }
                     }
+                    $scope.loading = false;
                     if (!$scope.$$phase)
                         $scope.$apply();
                 })
                 .error(function (xhr, status, error) {
+                    $scope.loading = false;
+                    if (!$scope.$$phase)
+                        $scope.$apply();
                     // error handling
                     if (error !== undefined) {
                         alertify.logPosition("top center");
@@ -752,21 +852,27 @@ recomSubApp.controller('EventController', function ($scope, userService, alertif
     $scope.user = userService.getUser();
     $scope.minDate = $filter('date')(new Date(), "yyyy-MM-dd");
     $scope.events = [];
+    $scope.loading = true;
     $.post(CONSTANTS.SERVICES.APIURL, {id: $scope.user.sid, view: CONSTANTS.VIEW.GETEVENTS})
             .success(function (data) {
                 $scope.events = data;
+                $scope.loading = false;
                 if (!$scope.$$phase)
                     $scope.$apply();
-            }).error(function (xhr, status, error) {
-        // error handling
-        if (error !== undefined) {
-            alertify.logPosition("top center");
+            })
+            .error(function (xhr, status, error) {
+                $scope.loading = false;
+                if (!$scope.$$phase)
+                    $scope.$apply();
+                // error handling
+                if (error !== undefined) {
+                    alertify.logPosition("top center");
 //            alertify.error("Something went wrong");
 
 
-        }
+                }
 
-    });
+            });
     $scope.formatDate = function (dateStr) {
         var datediff = utilService.datediffGreater(dateStr);
         if (datediff === 0)
@@ -780,6 +886,7 @@ recomSubApp.controller('EventController', function ($scope, userService, alertif
         $scope.event = event;
     };
     $scope.createEvent = function () {
+        $scope.loading = true;
         $scope.event.sid = $scope.user.sid;
         $scope.event.date_date = utilService.formatDate_Date($scope.dt);
         $scope.event.date = utilService.formatDate($scope.dt);
@@ -787,6 +894,7 @@ recomSubApp.controller('EventController', function ($scope, userService, alertif
         $scope.event.view = CONSTANTS.VIEW.ADDEVENT;
         $.post(CONSTANTS.SERVICES.APIURL, $scope.event)
                 .success(function (data) {
+                    $scope.loading = false;
                     if (data.reply) {
                         if (data.reply.includes('Succesfully'))
                         {
@@ -805,6 +913,9 @@ recomSubApp.controller('EventController', function ($scope, userService, alertif
                         $scope.$apply();
                 })
                 .error(function (xhr, status, error) {
+                    $scope.loading = false;
+                    if (!$scope.$$phase)
+                        $scope.$apply();
                     // error handling
                     if (error !== undefined) {
                         alertify.logPosition("top center");
@@ -821,34 +932,45 @@ recomSubApp.controller('EventController', function ($scope, userService, alertif
 recomSubApp.controller('BirthdayAnniversaryController', function ($scope, userService, $window, $cookieStore, $http, CONSTANTS) {
     $scope.birthdaysAndAnniversaries = [];
     $scope.user = userService.getUser();
+    $scope.loading = true;
     $.post(CONSTANTS.SERVICES.APIURL, {id: $scope.user.sid, view: CONSTANTS.VIEW.BNA})
             .success(function (data) {
                 $scope.birthdaysAndAnniversaries = data;
+                $scope.loading = false;
                 if (!$scope.$$phase)
                     $scope.$apply();
-            }).error(function (xhr, status, error) {
-        // error handling
-        console.log(error);
-    });
+            })
+            .error(function (xhr, status, error) {
+                // error handling
+                $scope.loading = false;
+                if (!$scope.$$phase)
+                    $scope.$apply();
+                console.log(error);
+            });
 });
 recomSubApp.controller('DashboardController', function ($scope, $location, userService, alertify, $http, CONSTANTS) {
     $scope.timeline = [];
     $scope.user = userService.getUser();
     $scope.req = {};
     $scope.getPosts = function () {
+        $scope.loading = true;
         $scope.req.view = CONSTANTS.VIEW.GETWALL;
         $scope.req.id = $scope.user.sid;
         $.post(CONSTANTS.SERVICES.APIURL, $scope.req)
                 .success(function (data) {
                     $scope.timeline = data;
+                    $scope.loading = false;
                     if (!$scope.$$phase)
                         $scope.$apply();
                 })
                 .error(function (xhr, status, error) {
+                    $scope.loading = false;
+                    if (!$scope.$$phase)
+                        $scope.$apply();
                     // error handling
                     if (error !== undefined) {
                         alertify.logPosition("top center");
-                        alertify.error("Something went wrong");
+                        alertify.error("Nothing to show");
                     }
 
                 });
@@ -861,6 +983,7 @@ recomSubApp.controller('LoginController', function ($scope, userService, alertif
     if (userService.getUser() !== undefined)
         $location.path('/home/dashboard');
     $scope.showHidePassword = 'password';
+    $scope.loading = false;
     $scope.togglePassword = function () {
         switch ($scope.showPassword)
         {
@@ -876,10 +999,13 @@ recomSubApp.controller('LoginController', function ($scope, userService, alertif
     };
     $scope.user = {};
     $scope.login = function () {
+        $scope.loading = true;
         //This authenticates user
         $scope.user.view = CONSTANTS.VIEW.LOGIN;
         $.post(CONSTANTS.SERVICES.APIURL, $scope.user)
                 .success(function (data) {
+                    $scope.loading = false;
+
                     //This sets cookies for application
                     $cookieStore.put("societyApp", data);
                     //This adds user object in userService
@@ -897,6 +1023,9 @@ recomSubApp.controller('LoginController', function ($scope, userService, alertif
                         $scope.$apply();
                 })
                 .error(function (xhr, status, error) {
+                    $scope.loading = false;
+                    if (!$scope.$$phase)
+                        $scope.$apply();
                     // error handling
                     if (error !== undefined) {
                         alertify.logPosition("top center");
@@ -924,6 +1053,26 @@ recomApp.directive('loading', ['$', function ($)
             {
                 scope.isLoading = function () {
                     return $.pendingRequests.length > 0;
+                };
+                scope.$watch(scope.isLoading, function (v)
+                {
+                    if (v) {
+                        elm.show();
+                    } else {
+                        elm.hide();
+                    }
+                });
+            }
+        };
+    }]);
+recomApp.directive('loadingTwo', [function ()
+    {
+        return {
+            restrict: 'A',
+            link: function (scope, elm, attrs)
+            {
+                scope.isLoading = function () {
+                    return scope.$eval(attrs.isLoading);
                 };
                 scope.$watch(scope.isLoading, function (v)
                 {
