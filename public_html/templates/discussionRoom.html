@@ -10,7 +10,7 @@
     <ol class="chat">
         <li class="other" ng-class="{
                     self:msg.by_id === user.id
-                }" ng-repeat="msg in messages| reverse" scroll-if="msg.id == last_msg">
+                }" ng-repeat="msg in messages| reverse" scroll-if="msg.id == last_msg" scroll="scroll">
             <div class="msg">
                 <div class="user">{{msg.by_name}}</div>
                 <p>{{msg.message}}</p>

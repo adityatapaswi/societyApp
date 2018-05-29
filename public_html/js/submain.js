@@ -600,7 +600,6 @@ recomSubApp.controller('DiscussionController', function ($scope, $location, objT
             return utilService.formatChatDate(new Date(dateStr));
     };
     $scope.getOlderMessage = function () {
-        $scope.pagination.offset = $scope.pagination.offset + $scope.pagination.limit;
         $scope.getMessages();
     };
     $scope.getMessages = function () {
@@ -608,10 +607,16 @@ recomSubApp.controller('DiscussionController', function ($scope, $location, objT
             $scope.discussion = objTransferService.getObj();
         }
         if ($scope.discussion.id) {
-            $.post(CONSTANTS.SERVICES.APIURL, {id: $scope.discussion.id, limit: $scope.pagination.limit, offset: $scope.pagination.offset, view: CONSTANTS.VIEW.GETMESSAGE})
+            $.post(CONSTANTS.SERVICES.APIURL, {id: $scope.discussion.id, limit: $scope.messages.length+5, offset: 0, view: CONSTANTS.VIEW.GETMESSAGE})
                     .success(function (data) {
-                        $scope.messages = $scope.messages.concat(data);
-                        $scope.last_msg = $scope.messages[0].id;
+                        $scope.messages = data;
+                        if ($scope.last_msg !== $scope.messages[0].id) {
+                            $scope.last_msg = $scope.messages[0].id;
+                            $scope.scroll = true;
+                        }
+                        else {
+                            $scope.scroll = false;
+                        }
                         if (!$scope.$$phase)
                             $scope.$apply();
                     })
@@ -626,6 +631,36 @@ recomSubApp.controller('DiscussionController', function ($scope, $location, objT
         }
         else
             $location.path('/discussions');
+        $scope.setIntervalForMessage();
+    };
+    $scope.setIntervalForMessage = function () {
+        $scope.interval = setInterval(function () {
+            if ($location.$$path === '/discussionRoom') {
+                $.post(CONSTANTS.SERVICES.APIURL, {id: $scope.discussion.id, limit: $scope.messages.length, offset: 0, view: CONSTANTS.VIEW.GETMESSAGE})
+                        .success(function (data) {
+//                            console.log('Got New Messages');
+                            $scope.messages = data;
+                            $scope.scroll = false;
+                            if ($scope.last_msg !== $scope.messages[0].id)
+                            {
+                                $scope.last_msg = $scope.messages[0].id;
+                                $scope.scroll = true;
+                            }
+                            if (!$scope.$$phase)
+                                $scope.$apply();
+                        })
+                        .error(function (xhr, status, error) {
+                            // error handling
+                            if (error !== undefined) {
+//                                alertify.logPosition("top center");
+//                                alertify.error("No More Messages");
+                            }
+
+                        });
+            }
+            else
+                clearInterval($scope.interval);
+        }, 3000);
     };
     $scope.addMessage = function () {
         $.post(CONSTANTS.SERVICES.APIURL, {did: $scope.discussion.id, by_id: $scope.user.id, msg: $scope.msg, view: CONSTANTS.VIEW.ADDMESSAGE})
@@ -874,9 +909,10 @@ recomSubApp.controller('LoginController', function ($scope, userService, alertif
 recomSubApp.directive('scrollIf', function () {
     return function (scope, element, attributes) {
         setTimeout(function () {
-            if (scope.$eval(attributes.scrollIf)) {
-                window.scrollTo(0, element[0].offsetTop - 100)
-            }
+            if (scope.$eval(attributes.scroll))
+                if (scope.$eval(attributes.scrollIf)) {
+                    window.scrollTo(0, element[0].offsetTop - 100)
+                }
         });
     }
 });
