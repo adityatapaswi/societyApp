@@ -18,14 +18,15 @@
             
         </div>
     </div>
-    <hr><div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" ng-controller="PhotoGalleryController">
+    <hr><div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" ng-controller="EventController">
         <div class="modal-dialog">
             <div class="modal-content">
+                
                 <div class="modal-body center">
                     <!--<img class="modal-image" ng-src="{{imgUrl + photo.image_url}}">-->
                     <article class="card__article">
                         <div class="row">
-                            <div class="col-lg-6 left"></div>
+                            <div class="col-lg-6 left"><span ng-show="user.type==='chairman'" class="btn fa-stack fa-lg delete-btn" ng-click="deleteEvent(event)"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-trash-o fa-stack-1x fa-inverse"></i></span></div>
                             <div class="col-lg-6 right time">
                                 On:{{formatDate(event.date_date)}}
                             </div>

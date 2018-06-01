@@ -44,7 +44,7 @@ recomSubApp.controller('PostWallController', function ($scope, userService, aler
                     // error handling
                     if (error !== undefined) {
                         alertify.logPosition("top center");
-                        alertify.error("Something Went Wrong");
+                        alertify.error("Adding Post Failed");
                     }
 
                 });
@@ -90,7 +90,7 @@ recomSubApp.controller('RedirectController', function ($scope, alertify, $locati
                     // error handling
                     if (error !== undefined) {
                         alertify.logPosition("top center");
-                        alertify.error("Something went wrong");
+                        alertify.error("Payment Failed");
                     }
                 });
     }
@@ -133,7 +133,7 @@ recomSubApp.controller('AddSocietyMemberController', function ($scope, userServi
                     // error handling
                     if (error !== undefined) {
                         alertify.logPosition("top center");
-                        alertify.error("Something Went Wrong");
+                        alertify.error("Failed To Add Member");
                     }
 
                 });
@@ -177,7 +177,7 @@ recomSubApp.controller('SignupController', function ($scope, alertify, utilServi
                     // error handling
                     if (error !== undefined) {
                         alertify.logPosition("top center");
-                        alertify.error("Something Went Wrong");
+                        alertify.error("Registration Failed");
                     }
 
                 });
@@ -255,7 +255,7 @@ recomSubApp.controller('UserController', function ($scope, objTransferService, a
                         // error handling
                         if (error !== undefined) {
                             alertify.logPosition("top center");
-                            alertify.error("Somthing Went Wrong");
+                            alertify.error("Password Change Failed");
                         }
 
                     });
@@ -281,7 +281,7 @@ recomSubApp.controller('UserController', function ($scope, objTransferService, a
                     // error handling
                     if (error !== undefined) {
                         alertify.logPosition("top center");
-                        alertify.error("Somthing Went Wrong");
+                        alertify.error("Unregistered Email Id");
                     }
                     $scope.loading = false;
                     if (!$scope.$$phase)
@@ -329,7 +329,7 @@ recomSubApp.controller('PhotoGalleryController', function ($scope, userService, 
                                     // error handling
                                     if (error !== undefined) {
                                         alertify.logPosition("top center");
-                                        alertify.error("Somthing Went Wrong");
+                                        alertify.error("Photo Deletion Failed");
                                     }
 
                                 });
@@ -361,7 +361,7 @@ recomSubApp.controller('PhotoGalleryController', function ($scope, userService, 
                     // error handling
                     if (error !== undefined) {
                         alertify.logPosition("top center");
-                        alertify.error("Nothing To Show");
+                        alertify.error("Nothing To Show In Your Gallery");
                     }
 
                 });
@@ -405,7 +405,7 @@ recomSubApp.controller('PhotoGalleryController', function ($scope, userService, 
                     // error handling
                     if (error !== undefined) {
                         alertify.logPosition("top center");
-                        alertify.error("Something Went Wrong");
+                        alertify.error("Photo Upload Failed");
                     }
 
                 });
@@ -426,7 +426,7 @@ recomSubApp.controller('ManageSocietyMembersController', function ($scope, userS
     {
         objTransferService.setObj(member);
         $location.path('/change-password');
-    }
+    };
     $scope.getMembers = function ()
     {
         $scope.loading = true;
@@ -444,7 +444,7 @@ recomSubApp.controller('ManageSocietyMembersController', function ($scope, userS
                         if (!$scope.$$phase)
                             $scope.$apply();
                         alertify.logPosition("top center");
-                        alertify.error("Something went wrong");
+                        alertify.error("No Society Members Yet!!");
                     }
                 });
     };
@@ -471,8 +471,8 @@ recomSubApp.controller('BalanceSheetController', function ($scope, userService, 
                 $scope.loading = false;
                 if (!$scope.$$phase)
                     $scope.$apply();
-                alertify.logPosition("top center");
-                alertify.error("Something went wrong");
+//                alertify.logPosition("top center");
+//                alertify.error("No Transactions Yet!");
             }
         });
     };
@@ -506,7 +506,7 @@ recomSubApp.controller('BalanceSheetController', function ($scope, userService, 
                 if (!$scope.$$phase)
                     $scope.$apply();
                 alertify.logPosition("top center");
-                alertify.error("Something went wrong");
+                alertify.error("Failed To Register Transaction");
             }
         });
     };
@@ -525,7 +525,7 @@ recomSubApp.controller('BalanceSheetController', function ($scope, userService, 
                 if (!$scope.$$phase)
                     $scope.$apply();
                 alertify.logPosition("top center");
-                alertify.error("Something went wrong");
+                alertify.error("No Transactions Yet!");
             }
         });
         $scope.getSummary();
@@ -599,7 +599,7 @@ recomSubApp.controller('PaymentsController', function ($scope, $location, userSe
                         $scope.$apply();
                     if (error !== undefined) {
                         alertify.logPosition("top center");
-                        alertify.error("Something Went Wrong");
+                        alertify.error("Payment Request Failed");
                     }
 
                 });
@@ -686,8 +686,8 @@ recomSubApp.controller('DiscussionController', function ($scope, $location, objT
         else
             return utilService.formatChatDate(new Date(dateStr));
     };
-    $scope.gotoDisscussions= function () {
-      $location.path('/discussions')  
+    $scope.gotoDisscussions = function () {
+        $location.path('/discussions')
     };
     $scope.getOlderMessage = function () {
         $scope.getMessages();
@@ -771,7 +771,7 @@ recomSubApp.controller('DiscussionController', function ($scope, $location, objT
                     // error handling
                     if (error !== undefined) {
                         alertify.logPosition("top center");
-                        alertify.error("Something went wrong");
+                        alertify.error("Message Sending Failed");
                     }
 
                 });
@@ -792,7 +792,7 @@ recomSubApp.controller('DiscussionController', function ($scope, $location, objT
                     // error handling
                     if (error !== undefined) {
                         alertify.logPosition("top center");
-                        alertify.error("Something went wrong");
+                        alertify.error("No Ongoing Discussions!");
                     }
 
                 });
@@ -832,7 +832,35 @@ recomSubApp.controller('DiscussionController', function ($scope, $location, objT
                     // error handling
                     if (error !== undefined) {
                         alertify.logPosition("top center");
-                        alertify.error("Something went wrong");
+                        alertify.error("Failed To Create Discussion");
+                    }
+
+                });
+    };
+    $scope.deleteDiscussion = function (disc)
+    {
+        disc.view = CONSTANTS.VIEW.DELETEDISCUSSION;
+        $scope.loading = true;
+        $.post(CONSTANTS.SERVICES.APIURL, disc)
+                .success(function (data) {
+
+                    alertify.logPosition("top center");
+                    alertify.success(data);
+                    $scope.discussions=[];  
+                    $scope.getDisscussion();
+
+                    $scope.loading = false;
+                    if (!$scope.$$phase)
+                        $scope.$apply();
+                })
+                .error(function (xhr, status, error) {
+                    $scope.loading = false;
+                    if (!$scope.$$phase)
+                        $scope.$apply();
+                    // error handling
+                    if (error !== undefined) {
+                        alertify.logPosition("top center");
+                        alertify.error("Failed To Create Discussion");
                     }
 
                 });
@@ -865,12 +893,9 @@ recomSubApp.controller('EventController', function ($scope, userService, alertif
                 if (!$scope.$$phase)
                     $scope.$apply();
                 // error handling
-                if (error !== undefined) {
-                    alertify.logPosition("top center");
+//                if (error !== undefined) {
+//                    alertify.logPosition("top center");
 //            alertify.error("Something went wrong");
-
-
-                }
 
             });
     $scope.formatDate = function (dateStr) {
@@ -881,6 +906,32 @@ recomSubApp.controller('EventController', function ($scope, userService, alertif
             return "Tommorow";
         else
             return utilService.formatChatDate(new Date(dateStr));
+    };
+    $scope.deleteEvent = function (event) {
+        event.view = CONSTANTS.VIEW.DELETEEVENT;
+        $scope.loading = true;
+        $.post(CONSTANTS.SERVICES.APIURL, event)
+                .success(function (data) {
+                    $scope.loading = false;
+
+                    alertify.logPosition("top center");
+                    alertify.success(data);
+                    $window.location.reload();
+
+                    if (!$scope.$$phase)
+                        $scope.$apply();
+                })
+                .error(function (xhr, status, error) {
+                    $scope.loading = false;
+                    if (!$scope.$$phase)
+                        $scope.$apply();
+                    // error handling
+                    if (error !== undefined) {
+                        alertify.logPosition("top center");
+                        alertify.error("Failed To Delete Event");
+                    }
+
+                });
     };
     $scope.selectEvent = function (event) {
         $scope.event = event;
@@ -919,7 +970,7 @@ recomSubApp.controller('EventController', function ($scope, userService, alertif
                     // error handling
                     if (error !== undefined) {
                         alertify.logPosition("top center");
-                        alertify.error("Something went wrong");
+                        alertify.error("Failed To Create Event");
                     }
 
                 });
@@ -1227,6 +1278,8 @@ recomApp.constant('CONSTANTS', (function () {
         DELETEIMAGE: 'delete image',
         CHANGEPASS: 'change password',
         GETUSERID: 'get user id',
+        DELETEEVENT: 'delete event',
+        DELETEDISCUSSION: 'delete discussion',
         CONTACTUS: 'contact us'
     };
     CONSTANTS.SERVICES = SERVICES;

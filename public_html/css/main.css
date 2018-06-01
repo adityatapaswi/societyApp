@@ -517,7 +517,7 @@ a:hover{
 }
 
 .show{
-    height:270px;
+    height:100%;
 }
 
 @media screen and (max-width: 650px) {
@@ -548,6 +548,13 @@ textarea {
     left: 50%;
     transform: translateX(-50%);
     text-align: center;
+}
+
+input.ng-invalid {
+        border: 1px solid pink;
+}
+input.ng-valid {
+        border: 1px solid lightgreen;
 }
 .loading-spiner-holder {
     display: none;
